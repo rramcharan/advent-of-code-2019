@@ -22,7 +22,7 @@ namespace adventofcode2019_day3
             for (var x = 0; x < MaxX; x++)
                 for (var y = 0; y < MaxY; y++)
                     Connector[x, y] = 0;
-            Central = new Point(1,8);
+            Central = new Point(1,1);
         }
 
         public int[,] Connector { get; private set; }
@@ -49,9 +49,9 @@ namespace adventofcode2019_day3
             switch (direction)
             {
                 case "U":
-                    return Move(point, 0, -1 * steps);
-                case "D":
                     return Move(point, 0, steps);
+                case "D":
+                    return Move(point, 0, -1 * steps);
                 case "L":
                     return Move(point, -1 * steps, 0);
                 case "R":
@@ -112,7 +112,7 @@ namespace adventofcode2019_day3
             }
             map[Central.X, Central.Y] = "o";
             var sb = new StringBuilder();
-            for (var y = 0; y < MaxY; y++)
+            for (var y = MaxY-1; y >= 0; y--)
             {
                 sb.AppendLine();
                 for (var x = 0; x < MaxX; x++)

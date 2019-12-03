@@ -17,14 +17,14 @@ namespace adventofcode2019_day3.Tests
         {
             // Arrange
             var board = new Board();
-            var startPoint = new Point(1, 8);
+            var startPoint = new Point(1, 1);
 
             // Act
             var nextPoint = board.Move(startPoint, "R8");
 
             // Assert
             Assert.AreEqual(9, nextPoint.X, "X position unexpected");
-            Assert.AreEqual(8, nextPoint.Y, "Y position unexpected");
+            Assert.AreEqual(1, nextPoint.Y, "Y position unexpected");
             var expectedMap = @"
 ...........
 ...........
@@ -44,14 +44,14 @@ namespace adventofcode2019_day3.Tests
         {
             // Arrange
             var board = new Board();
-            var startPoint = new Point(1, 8);
+            var startPoint = new Point(1, 1);
 
             // Act
             var nextPoint = board.Move(startPoint, "L1");
 
             // Assert
             Assert.AreEqual(0, nextPoint.X, "X position unexpected");
-            Assert.AreEqual(8, nextPoint.Y, "Y position unexpected");
+            Assert.AreEqual(1, nextPoint.Y, "Y position unexpected");
             var expectedMap = @"
 ...........
 ...........
@@ -70,14 +70,14 @@ namespace adventofcode2019_day3.Tests
         {
             // Arrange
             var board = new Board();
-            var startPoint = new Point(1, 8);
+            var startPoint = new Point(1, 1);
 
             // Act
             var nextPoint = board.Move(startPoint, "U5");
 
             // Assert
             Assert.AreEqual(1, nextPoint.X, "X position unexpected");
-            Assert.AreEqual(3, nextPoint.Y, "Y position unexpected");
+            Assert.AreEqual(6, nextPoint.Y, "Y position unexpected");
             var expectedMap = @"
 ...........
 ...........
@@ -96,14 +96,14 @@ namespace adventofcode2019_day3.Tests
         {
             // Arrange
             var board = new Board();
-            var startPoint = new Point(1, 8);
+            var startPoint = new Point(1, 1);
 
             // Act
             var nextPoint = board.Move(startPoint, "D1");
 
             // Assert
             Assert.AreEqual(1, nextPoint.X, "X position unexpected");
-            Assert.AreEqual(9, nextPoint.Y, "Y position unexpected");
+            Assert.AreEqual(0, nextPoint.Y, "Y position unexpected");
             var expectedMap = @"
 ...........
 ...........
@@ -126,7 +126,7 @@ namespace adventofcode2019_day3.Tests
         {
             // Arrange
             var board = new Board();
-            var startPoint = new Point(1, 8);
+            var startPoint = new Point(1, 1);
 
             // Act
             var nextPoint = board.Move(startPoint, "R8");
@@ -134,7 +134,7 @@ namespace adventofcode2019_day3.Tests
 
             // Assert
             Assert.AreEqual(9, nextPoint.X, "X position unexpected");
-            Assert.AreEqual(3, nextPoint.Y, "Y position unexpected");
+            Assert.AreEqual(6, nextPoint.Y, "Y position unexpected");
             var expectedMap = @"
 ...........
 ...........
@@ -191,7 +191,7 @@ namespace adventofcode2019_day3.Tests
 
             // Assert
             Assert.AreEqual(4, endPoint.X, "X position unexpected");
-            Assert.AreEqual(6, endPoint.Y, "Y position unexpected");
+            Assert.AreEqual(3, endPoint.Y, "Y position unexpected");
             var expectedMap = @"
 ...........
 ...........
