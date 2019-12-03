@@ -17,14 +17,14 @@ namespace adventofcode2019_day3.Tests
         {
             // Arrange
             var board = new Board();
-            var startPoint = new Point(1, 1);
+            var wire = board.CreateWire(1, 1);
 
             // Act
-            var nextPoint = board.Move(startPoint, "R8");
+            board.Move(wire, "R8");
 
             // Assert
-            Assert.AreEqual(9, nextPoint.X, "X position unexpected");
-            Assert.AreEqual(1, nextPoint.Y, "Y position unexpected");
+            Assert.AreEqual(9, wire.X, "X position unexpected");
+            Assert.AreEqual(1, wire.Y, "Y position unexpected");
             var expectedMap = @"
 ...........
 ...........
@@ -44,14 +44,14 @@ namespace adventofcode2019_day3.Tests
         {
             // Arrange
             var board = new Board();
-            var startPoint = new Point(1, 1);
+            var wire = board.CreateWire(1, 1);
 
             // Act
-            var nextPoint = board.Move(startPoint, "L1");
+            board.Move(wire, "L1");
 
             // Assert
-            Assert.AreEqual(0, nextPoint.X, "X position unexpected");
-            Assert.AreEqual(1, nextPoint.Y, "Y position unexpected");
+            Assert.AreEqual(0, wire.X, "X position unexpected");
+            Assert.AreEqual(1, wire.Y, "Y position unexpected");
             var expectedMap = @"
 ...........
 ...........
@@ -70,14 +70,14 @@ namespace adventofcode2019_day3.Tests
         {
             // Arrange
             var board = new Board();
-            var startPoint = new Point(1, 1);
+            var wire = board.CreateWire(1, 1);
 
             // Act
-            var nextPoint = board.Move(startPoint, "U5");
+            board.Move(wire, "U5");
 
             // Assert
-            Assert.AreEqual(1, nextPoint.X, "X position unexpected");
-            Assert.AreEqual(6, nextPoint.Y, "Y position unexpected");
+            Assert.AreEqual(1, wire.X, "X position unexpected");
+            Assert.AreEqual(6, wire.Y, "Y position unexpected");
             var expectedMap = @"
 ...........
 ...........
@@ -96,14 +96,14 @@ namespace adventofcode2019_day3.Tests
         {
             // Arrange
             var board = new Board();
-            var startPoint = new Point(1, 1);
+            var wire = board.CreateWire(1, 1);
 
             // Act
-            var nextPoint = board.Move(startPoint, "D1");
+            board.Move(wire, "D1");
 
             // Assert
-            Assert.AreEqual(1, nextPoint.X, "X position unexpected");
-            Assert.AreEqual(0, nextPoint.Y, "Y position unexpected");
+            Assert.AreEqual(1, wire.X, "X position unexpected");
+            Assert.AreEqual(0, wire.Y, "Y position unexpected");
             var expectedMap = @"
 ...........
 ...........
@@ -126,15 +126,15 @@ namespace adventofcode2019_day3.Tests
         {
             // Arrange
             var board = new Board();
-            var startPoint = new Point(1, 1);
+            var wire = board.CreateWire(1, 1);
 
             // Act
-            var nextPoint = board.Move(startPoint, "R8");
-            nextPoint = board.Move(nextPoint, "U5");
+            board.Move(wire, "R8");
+            board.Move(wire, "U5");
 
             // Assert
-            Assert.AreEqual(9, nextPoint.X, "X position unexpected");
-            Assert.AreEqual(6, nextPoint.Y, "Y position unexpected");
+            Assert.AreEqual(9, wire.X, "X position unexpected");
+            Assert.AreEqual(6, wire.Y, "Y position unexpected");
             var expectedMap = @"
 ...........
 ...........
