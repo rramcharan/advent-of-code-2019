@@ -14,28 +14,32 @@ namespace adventofcode2019_day3
     }
     public class Board
     {
+        private static int MaxX = 11;
+        private static int MaxY = 10;
         public Board()
         {
-            Connector = new int[10, 11];
-            for (var x = 0; x < 10; x++)
-                for (var y = 0; y < 11; y++)
+            Connector = new int[MaxX, MaxY];
+            for (var x = 0; x < MaxX; x++)
+                for (var y = 0; y < MaxY; y++)
                     Connector[x, y] = 0;
             Central = new Point(1,8);
         }
 
         public int[,] Connector { get; private set; }
         public Point Central { get; private set; }
+        public string Map => DrawMap();
 
-        public void Wire(string path)
+        public Point Wire(string path)
         {
-            if (string.IsNullOrEmpty(path)) return;
-
             var point = new Point(Central.X, Central.Y);
+            if (string.IsNullOrEmpty(path)) return point;
+
             var movements = path.Replace(" ","").Split(',');
             foreach(var movement in movements)
             {
                 point = Move(point, movement);
             }
+            return point;
         }
 
         public Point Move(Point point, string movement)
@@ -68,18 +72,58 @@ namespace adventofcode2019_day3
             var yDirection = ySteps > 0 ? 1 : -1;
             for (int moveX = 0; moveX < Math.Abs(xSteps); moveX++)
             {
-                x = point.X + moveX + (1 * xDirection);
+                x = point.X + ((moveX + 1) * xDirection);
                 Connector[x, y]++;
             }
 
             for (int moveY = 0; moveY < Math.Abs(ySteps); moveY++)
             {
-                y = point.Y + moveY + (1 * yDirection);
+                y = point.Y + ((moveY + 1) * yDirection);
                 Connector[x, y]++;
             }
 
             return new Point(x,y);
         }
+
+        private string DrawMap()
+        {
+            var map = new string[MaxX, MaxY];
+            for (var x = 0; x < MaxX; x++)
+            {
+                for (var y = 0; y < MaxY; y++)
+                {
+                    var nbr = Connector[x, y];
+                    switch (nbr)
+                    {
+                        case 0:
+                            map[x, y] = ".";
+                            break;
+                        case 1:
+                            map[x, y] = "-";
+                            break;
+                        case 2:
+                            map[x, y] = "x";
+                            break;
+                        default:
+                            map[x, y] = "?";
+                            break;
+                    }
+                }
+            }
+            map[Central.X, Central.Y] = "o";
+            var sb = new StringBuilder();
+            for (var y = 0; y < MaxY; y++)
+            {
+                sb.AppendLine();
+                for (var x = 0; x < MaxX; x++)
+                {
+                    sb.Append(map[x, y]);
+                }
+            }
+            return sb.ToString();
+        }
+
+
 
         public static int ManhattanDistance(Point a, Point b)
         {
