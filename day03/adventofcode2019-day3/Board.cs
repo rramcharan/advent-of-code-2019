@@ -8,22 +8,64 @@ namespace adventofcode2019_day3
     {
         private int MaxX = 11;
         private int MaxY = 10;
-        public Board()
+        public Board():this(11,10)
         {
+        }
+        public Board(int maxX, int maxY)
+        {
+            ClosestIntersectionDistance = 0;
+
+            MaxX = maxX;
+            MaxY = maxY;
+
             Wires = new List<Wire>();
             Connectors = new Connector[MaxX, MaxY];
 
             for (var x = 0; x < MaxX; x++)
                 for (var y = 0; y < MaxY; y++)
-                    Connectors[x, y] = new Connector(); ;
+                    Connectors[x, y] = new Connector();
             Central = new Point(1,1);
         }
 
-        private void Resize(int addX, int addY)
+        public void Resize(int addX, int addY)
         {
+            var newMaxX = MaxX + addX;
+            var newMaxY = MaxY + addY;
+            var connectors = new Connector[newMaxX, newMaxY];
+            for (var x = 0; x < MaxX; x++)
+            {
+                for (var y = 0; y < MaxY; y++)
+                {
+                    connectors[x, y] = Connectors[x, y];
+                }
+            }
+            if (addX > 0)
+            {
+                for (var x = MaxX; x < newMaxX; x++)
+                {
+                    for (var y = 0; y < newMaxY; y++)
+                    {
+                        connectors[x, y] = new Connector();
+                    }
+                }
+            }
+            if (addY > 0)
+            {
+                for (var x = 0; x < newMaxX; x++)
+                {
+                    for (var y = MaxY; y < newMaxY; y++)
+                    {
+                        connectors[x, y] = new Connector();
+                    }
+                }
+            }
+            Connectors = connectors;
+            MaxX = newMaxX;
+            MaxY = newMaxY;
         }
-        
+
         public Connector[,] Connectors { get; private set; }
+        public int ClosestIntersectionDistance { get; private set; }
         public List<Wire> Wires { get; private set; }
         public Point Central { get; private set; }
         public string Map => DrawMap();
@@ -45,7 +87,7 @@ namespace adventofcode2019_day3
         {
             var wire = new Wire(x, y, $"Wire-{Wires.Count + 1}");
             Wires.Add(wire);
-            Connect(wire, Connectors[x, y]);
+            Connect(wire);
 
             return wire;
         }
@@ -53,7 +95,7 @@ namespace adventofcode2019_day3
         public void Move(Wire wire, string movement)
         {
             var direction = movement.Substring(0, 1);
-            var steps = Convert.ToInt32(movement.Substring(1, 1));
+            var steps = Convert.ToInt32(movement.Substring(1));
             switch (direction)
             {
                 case "U":
@@ -78,30 +120,54 @@ namespace adventofcode2019_day3
             if (xSteps == 0 && ySteps == 0) return ;
             if (xSteps != 0 && ySteps != 0) throw new Exception($"Unsuported move: x: {xSteps} and y: {ySteps}");
 
-            var x = wire.X;
-            var y = wire.Y;
+            var startX = wire.X;
+            var startY = wire.Y;
             var xDirection = xSteps > 0 ? 1 : -1;
             var yDirection = ySteps > 0 ? 1 : -1;
             for (int moveX = 0; moveX < Math.Abs(xSteps); moveX++)
             {
-                x = wire.X + ((moveX + 1) * xDirection);
-                Connect(wire, Connectors[x, y]);
+                wire.X = startX + ((moveX + 1) * xDirection);
+                IsXAvailable(wire.X);
+                Connect(wire);
             }
-            wire.X = x;
 
             for (int moveY = 0; moveY < Math.Abs(ySteps); moveY++)
             {
-                y = wire.Y + ((moveY + 1) * yDirection);
-                Connect(wire, Connectors[x, y]);
+                wire.Y = startY + ((moveY + 1) * yDirection);
+                IsYAvailable(wire.Y);
+                Connect(wire);
             }
-            wire.Y = y;
         }
 
-        private void Connect(Wire wire, Connector connector)
+        private void IsXAvailable(int x)
         {
+            if (Connectors.GetLength(0) > x) return;
+
+            Resize(10, 0);
+        }
+
+        private void IsYAvailable(int y)
+        {
+            if (Connectors.GetLength(1) > y) return;
+
+            Resize(0,10);
+        }
+
+        private void Connect(Wire wire)
+        {
+            var connector = Connectors[wire.X, wire.Y];
             if (connector.Wires.Contains(wire)) return;
 
             connector.Wires.Add(wire);
+
+            if (connector.Wires.Count > 1)
+            {
+                if ((wire.X != Central.X) || (wire.Y != Central.Y))
+                {
+                    var distance = ManhattanDistance(Central, wire.LastPoint);
+                    ClosestIntersectionDistance = distance;
+                }
+            }
         }
 
         private string DrawMap()
@@ -144,7 +210,10 @@ namespace adventofcode2019_day3
 
         public static int ManhattanDistance(Point a, Point b)
         {
-            return Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y);
+            var x = Math.Abs(a.X - b.X);
+            var y = Math.Abs(a.Y - b.Y);
+            return x + y;
         }
+
     }
 }
