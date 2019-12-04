@@ -56,3 +56,36 @@ R998,U547,L703,D251,L776,U837,R100,U240,R197,D216,L220,U606,L437,U56,R940,U800,L
 L995,U122,R472,U470,R725,U906,L83,U672,R448,U781,L997,U107,R66,D966,L780,D181,L662,U158,R804,D837,L237,U164,L98,U582,R925,D806,L153,D843,R601,U941,L968,D528,R482,D586,R15,U370,L592,U836,R828,U676,R606,D20,R841,U117,L262,U377,R375,U503,R166,D398,R161,D9,R140,D188,R895,D226,R77,U28,L727,D72,L51,U425,R370,D377,L801,D525,R102,D568,L416,D300,R415,U199,R941,U211,R285,U719,L259,U872,L959,U350,L196,D830,R515,U899,R298,U875,R946,U797,R108,U461,R999,D49,L369,D472,R83,D265,L825,D163,R162,U906,L816,D241,L587,D801,R601,D630,R937,U954,L379,D347,R831,D337,L192,D649,L853,U270,R162,D892,L26,D663,L276,U891,R843,U67,R225,D88,R686,U662,R794,D814,L200,D887,R567,U363,L863,U16,R975,D470,R714,U771,L267,D402,R75,U98,L686,U565,R584,D402,L824,D927,R71,U39,L174,D494,L358,D626,R616,D369,R471,U881,L428,U53,R862,U749,L847,D944,L887,D695,R442,U870,L993,U315,L878,U100,L480,D354,L12,D533,L236,D364,R450,U679,L926,D391,R313,D953,L560,D740,L974,D119,L370,U404,R339,U233,R901,U514,R584,D495,R308,U170,R759,U592,R388,U396,R477,U670,R906,D687,L874,U352,R124,U700,R289,D524,L93,D817,R408,D776,L235,D928,L534,D296,R116,U995,L63,D903,R758,U881,L530,U498,R573,D626,L26,U269,R237,U287,L840,D603,R948,D567,R89,U552,L299,D774,R863,D182,R773,D108,L137,U88,L731,U793,L267,U902,L41,U258,L156,U361,R389,D839,L976,U960,L342,D489,R816,U391,L393,U601,R255,D629,R832,U877,L34,D373,L809,D679,L104,U901,R157,U468,R143,U896,L637,D577,L545,D486,L970,D130,L305,D909,R984,D500,L935,U949,R525,D547,L786,U106,L269,D511,L919
 ```
 
+## --- Part Two ---
+
+It turns out that this circuit is very timing-sensitive; you actually need to *minimize the signal delay*.
+
+To do this, calculate the *number of steps* each wire takes to reach each intersection; choose the intersection where the *sum of both wires' steps* is lowest. If a wire visits a position on the grid multiple times, use the steps value from the *first* time it visits that position when calculating the total value of a specific intersection.
+
+The number of steps a wire takes is the total number of grid squares the wire has entered to get to that location, including the intersection being considered. Again consider the example from above:
+
+```
+...........
+.+-----+...
+.|.....|...
+.|..+--X-+.
+.|..|..|.|.
+.|.-X--+.|.
+.|..|....|.
+.|.......|.
+.o-------+.
+...........
+```
+
+In the above example, the intersection closest to the central port is reached after `8+5+5+2 = *20*` steps by the first wire and `7+6+4+3 = *20*` steps by the second wire for a total of `20+20 = *40*` steps.
+
+However, the top-right intersection is better: the first wire takes only `8+5+2 = *15*` and the second wire takes only `7+6+2 = *15*`, a total of `15+15 = *30*` steps.
+
+Here are the best steps for the extra examples from above:
+
+- `R75,D30,R83,U83,L12,D49,R71,U7,L72U62,R66,U55,R34,D71,R55,D58,R83` = `610` steps
+- `R98,U47,R26,D63,R33,U87,L62,D20,R33,U53,R51U98,R91,D20,R16,D67,R40,U7,R15,U6,R7` = `410` steps
+
+*What is the fewest combined steps the wires must take to reach an intersection?*
+
+Although it hasn't changed, you can still [get your puzzle input](https://adventofcode.com/2019/day/3/input).

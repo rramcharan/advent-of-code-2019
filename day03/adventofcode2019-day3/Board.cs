@@ -19,52 +19,12 @@ namespace adventofcode2019_day3
             MaxY = maxY;
 
             Wires = new List<Wire>();
-            Connectors = new Connector[MaxX, MaxY];
+            Connectors = new Connectors();
 
-            for (var x = 0; x < MaxX; x++)
-                for (var y = 0; y < MaxY; y++)
-                    Connectors[x, y] = new Connector();
             Central = new Point(1,1);
         }
 
-        public void Resize(int addX, int addY)
-        {
-            var newMaxX = MaxX + addX;
-            var newMaxY = MaxY + addY;
-            var connectors = new Connector[newMaxX, newMaxY];
-            for (var x = 0; x < MaxX; x++)
-            {
-                for (var y = 0; y < MaxY; y++)
-                {
-                    connectors[x, y] = Connectors[x, y];
-                }
-            }
-            if (addX > 0)
-            {
-                for (var x = MaxX; x < newMaxX; x++)
-                {
-                    for (var y = 0; y < newMaxY; y++)
-                    {
-                        connectors[x, y] = new Connector();
-                    }
-                }
-            }
-            if (addY > 0)
-            {
-                for (var x = 0; x < newMaxX; x++)
-                {
-                    for (var y = MaxY; y < newMaxY; y++)
-                    {
-                        connectors[x, y] = new Connector();
-                    }
-                }
-            }
-            Connectors = connectors;
-            MaxX = newMaxX;
-            MaxY = newMaxY;
-        }
-
-        public Connector[,] Connectors { get; private set; }
+        public Connectors Connectors { get; private set; }
         public int ClosestIntersectionDistance { get; private set; }
         public List<Wire> Wires { get; private set; }
         public Point Central { get; private set; }
@@ -127,35 +87,19 @@ namespace adventofcode2019_day3
             for (int moveX = 0; moveX < Math.Abs(xSteps); moveX++)
             {
                 wire.X = startX + ((moveX + 1) * xDirection);
-                IsXAvailable(wire.X);
                 Connect(wire);
             }
 
             for (int moveY = 0; moveY < Math.Abs(ySteps); moveY++)
             {
                 wire.Y = startY + ((moveY + 1) * yDirection);
-                IsYAvailable(wire.Y);
                 Connect(wire);
             }
         }
 
-        private void IsXAvailable(int x)
-        {
-            if (Connectors.GetLength(0) > x) return;
-
-            Resize(10, 0);
-        }
-
-        private void IsYAvailable(int y)
-        {
-            if (Connectors.GetLength(1) > y) return;
-
-            Resize(0,10);
-        }
-
         private void Connect(Wire wire)
         {
-            var connector = Connectors[wire.X, wire.Y];
+            var connector = Connectors.GetConnector(wire.X, wire.Y);
             if (connector.Wires.Contains(wire)) return;
 
             connector.Wires.Add(wire);
@@ -165,7 +109,8 @@ namespace adventofcode2019_day3
                 if ((wire.X != Central.X) || (wire.Y != Central.Y))
                 {
                     var distance = ManhattanDistance(Central, wire.LastPoint);
-                    ClosestIntersectionDistance = distance;
+                    if (ClosestIntersectionDistance == 0 || ClosestIntersectionDistance > distance)
+                        ClosestIntersectionDistance = distance;
                 }
             }
         }
@@ -177,8 +122,8 @@ namespace adventofcode2019_day3
             {
                 for (var y = 0; y < MaxY; y++)
                 {
-                    var connector = Connectors[x, y];
-                    switch (connector.Wires.Count)
+                    var count = Connectors.GetWiresCount(x, y);
+                    switch (count)
                     {
                         case 0:
                             map[x, y] = ".";

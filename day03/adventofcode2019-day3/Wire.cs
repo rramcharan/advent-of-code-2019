@@ -11,6 +11,7 @@
         public string Name { get; set; }
         public Point StartPoint { get; private set; }
         public Point LastPoint { get; private set; }
+        public Dictionary<Point, int> Points;
         public int X
         {
             get => LastPoint.X;
