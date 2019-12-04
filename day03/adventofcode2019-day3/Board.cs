@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace adventofcode2019_day3
@@ -29,6 +30,10 @@ namespace adventofcode2019_day3
         public List<Wire> Wires { get; private set; }
         public Point Central { get; private set; }
         public string Map => DrawMap();
+
+        //public int StepsToClosestConnector => Wires.Sum(w => w.StepsToClosestConnector);
+
+        public int MinimalStepsToIntersection { get; private set; }
 
         public Wire Wire(string path)
         {
@@ -80,38 +85,69 @@ namespace adventofcode2019_day3
             if (xSteps == 0 && ySteps == 0) return ;
             if (xSteps != 0 && ySteps != 0) throw new Exception($"Unsuported move: x: {xSteps} and y: {ySteps}");
 
-            var startX = wire.X;
-            var startY = wire.Y;
             var xDirection = xSteps > 0 ? 1 : -1;
             var yDirection = ySteps > 0 ? 1 : -1;
-            for (int moveX = 0; moveX < Math.Abs(xSteps); moveX++)
+            for (var moveX = 0; moveX < Math.Abs(xSteps); moveX++)
             {
-                wire.X = startX + ((moveX + 1) * xDirection);
-                Connect(wire);
+                MoveWireNextStep(wire, xDirection, 0);
             }
 
-            for (int moveY = 0; moveY < Math.Abs(ySteps); moveY++)
-            {
-                wire.Y = startY + ((moveY + 1) * yDirection);
-                Connect(wire);
+            for (var moveY = 0; moveY < Math.Abs(ySteps); moveY++)
+            { 
+                MoveWireNextStep(wire, 0, yDirection);
             }
+        }
+
+        private void MoveWireNextStep(Wire wire, int x, int y)
+        {
+            wire.IncrementStep();
+            wire.X += x;
+            wire.Y += y;
+            Connect(wire);
         }
 
         private void Connect(Wire wire)
         {
             var connector = Connectors.GetConnector(wire.X, wire.Y);
-            if (connector.Wires.Contains(wire)) return;
+            if (connector.Wires.ContainsKey(wire)) return;
 
-            connector.Wires.Add(wire);
+            connector.Wires[wire]=wire.Steps;
 
             if (connector.Wires.Count > 1)
             {
                 if ((wire.X != Central.X) || (wire.Y != Central.Y))
                 {
+                    Console.WriteLine("Intersection");
+                    var stepsToIntersection = 0;
+                    foreach (var tWire in connector.Wires.Keys)
+                    {
+                        stepsToIntersection += connector.Wires[tWire];
+                        Console.WriteLine($"{tWire.Name} (steps: {connector.Wires[tWire]})");
+                        System.Diagnostics.Debug.WriteLine($"{tWire.Name} (steps: {connector.Wires[tWire]})");
+                    }
+                    SetMinimalStepsToIntersection(stepsToIntersection);
+
                     var distance = ManhattanDistance(Central, wire.LastPoint);
                     if (ClosestIntersectionDistance == 0 || ClosestIntersectionDistance > distance)
                         ClosestIntersectionDistance = distance;
+                    foreach(var aWire in connector.Wires.Keys)
+                    {
+                        var steps = connector.Wires[aWire];
+                        if (aWire.SetMinimumStepsToFirstConnector(steps))
+                        {
+                            //aWire.ClosestPoint = aWire.LastPoint;
+                            aWire.ClosestPoint = new Point(wire.X, wire.Y);
+                        }
+                    }
                 }
+            }
+        }
+
+        private void SetMinimalStepsToIntersection(int stepsToIntersection)
+        {
+            if (MinimalStepsToIntersection == 0 || MinimalStepsToIntersection > stepsToIntersection)
+            {
+                MinimalStepsToIntersection = stepsToIntersection;
             }
         }
 

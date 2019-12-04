@@ -7,9 +7,9 @@ namespace adventofcode2019_day3
     {
         public Connector()
         {
-            Wires = new List<Wire>();
+            Wires = new Dictionary<Wire, int>();
         }
-        public List<Wire> Wires { get; private set; }
+        public Dictionary<Wire, int> Wires { get; private set; }
     }
     public class Connectors
     {
