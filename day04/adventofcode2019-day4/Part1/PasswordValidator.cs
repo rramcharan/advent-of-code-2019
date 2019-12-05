@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace adventofcode2019_day4
+﻿namespace adventofcode2019_day4.Part1
 {
     public class PasswordValidator
     {
@@ -15,7 +13,7 @@ namespace adventofcode2019_day4
             // The value is within the range given in your puzzle input.
             // Two adjacent digits are the same(like 22 in 122345).
             if (!HasDoubleDigitsOnly(digits)) return false;
-            
+
             // Going from left to right, the digits never decrease;
             if (!HasIncreasingDigitsOnly(digits)) return false;
 
@@ -26,7 +24,7 @@ namespace adventofcode2019_day4
         private bool HasDoubleDigitsOnly(int[] digits)
         {
             var lastDigit = -1;
-            for(var idx=0; idx < digits.Length; idx++)
+            for (var idx = 0; idx < digits.Length; idx++)
             {
                 var currentDigit = digits[idx];
                 if (lastDigit == currentDigit)

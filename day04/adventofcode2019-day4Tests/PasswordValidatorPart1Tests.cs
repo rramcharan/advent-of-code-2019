@@ -1,10 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using adventofcode2019_day4;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using adventofcode2019_day4.Part1;
 
 namespace adventofcode2019_day4.Tests
 {
