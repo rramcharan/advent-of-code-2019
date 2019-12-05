@@ -43,6 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Part2\Password.cs" />
+    <Compile Include="Part2\PasswordValidator.cs" />
     <Compile Include="Part1\Password.cs" />
     <Compile Include="Part1\PasswordValidator.cs" />
     <Compile Include="Program.cs" />
