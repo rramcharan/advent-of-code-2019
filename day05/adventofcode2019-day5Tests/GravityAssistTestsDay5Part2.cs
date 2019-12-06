@@ -36,6 +36,7 @@ namespace adventofcode2019_day5.Tests
             var input = new int[]
             {
                 1101,100,-1,4,0,
+                99
             };
 
             // Act

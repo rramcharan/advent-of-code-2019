@@ -70,57 +70,63 @@ namespace adventofcode2019_day5.Part2
             var instructionPointer = _instructionPointer;
             var instruction = Instruction.Parse(_memory[instructionPointer]);
             var opCode = instruction.Opcode;
-            if (opCode == Opcode.Halt)
-            {
-                SendToOutput("HALT");
-                return false;
-            }
-            int address1;
-            int address2;
-            int address3;
-            int parameter1;
-            int parameter2;
+            
             switch (opCode)
             {
-                case Opcode.OpcodeAdd:
-                case Opcode.OpcodeMultiply:
-                    address1 = _memory[instructionPointer + 1];
-                    address2 = _memory[instructionPointer + 2];
-                    address3 = _memory[instructionPointer + 3];
+                case Opcode.Add:
+                case Opcode.Multiply:
+                    var value1 = GetValue(instructionPointer + 1, instruction.ModeParam1);
+                    var value2 = GetValue(instructionPointer + 2, instruction.ModeParam2);
 
-                    parameter1 = instruction.ModeParam1 == ParameterMode.Immediate ? address1 : _memory[address1];
-                    parameter2 = instruction.ModeParam2 == ParameterMode.Immediate ? address2 : _memory[address2];
-                    var result = opCode == Opcode.OpcodeAdd
-                        ? parameter1 + parameter2
-                        : opCode == Opcode.OpcodeMultiply
-                          ? parameter1 * parameter2
+                    var result = opCode == Opcode.Add
+                        ? value1 + value2
+                        : opCode == Opcode.Multiply
+                          ? value1 * value2
                           : throw new Exception($"Invalid opCode: '{opCode}'");
 
-                    if (instruction.ModeParam3 == ParameterMode.Immediate)
-                        throw new Exception("Third parameter should be a Position mode parameter");
-
-                    _memory[address3] = result;
-
-                    _instructionPointer += 4;
+                    SetValue(result, instructionPointer + 3, instruction.ModeParam3);
+                    InstructionPointerIncrement(4);
                     return true;
-                case Opcode.OpcodeReadInput:
-                    address1 = _memory[instructionPointer + 1];
-                    if (instruction.ModeParam1 == ParameterMode.Immediate)
-                        throw new Exception("Opcode=3: First parameter should be a Position mode parameter");
-                    _memory[address1] = 1;
-
-                    _instructionPointer += 2;
+                case Opcode.ReadInput:
+                    SetValue(1, instructionPointer + 1, instruction.ModeParam1);
+                    InstructionPointerIncrement(2);
                     return true;
-                case Opcode.OpcodeWriteOutput:
-                    address1 = _memory[instructionPointer + 1];
-                    parameter1 = instruction.ModeParam1 == ParameterMode.Immediate ? address1 : _memory[address1];
-                    SendToOutput(parameter1);
-
-                    _instructionPointer += 2;
+                case Opcode.WriteOutput:
+                    SendToOutput(GetValue(instructionPointer + 1, instruction.ModeParam1));
+                    InstructionPointerIncrement(2);
                     return true;
+                case Opcode.Halt:
+                    SendToOutput("HALT");
+                    return false;
             }
 
             return false;
+        }
+
+        private void InstructionPointerIncrement(int value)
+        {
+            SetInstructionPointer(_instructionPointer + value);
+        }
+
+        private void SetInstructionPointer(int value)
+        {
+            _instructionPointer = value;
+        }
+
+        private int GetValue(int from, ParameterMode mode)
+        {
+            var address = _memory[from];
+            var value = mode == ParameterMode.Immediate ? address : _memory[address];
+            return value;
+        }
+
+        private void SetValue(int value, int at, ParameterMode mode)
+        {
+            if (mode == ParameterMode.Immediate)
+                throw new Exception("Parameter should be a Position mode parameter");
+
+            var address = _memory[at];
+            _memory[address] = value;
         }
 
         private void SendToOutput(int number)

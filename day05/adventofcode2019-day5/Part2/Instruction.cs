@@ -27,10 +27,14 @@ namespace adventofcode2019_day5.Part2
         {
             switch (code)
             {
-                case 1: return Opcode.OpcodeAdd;
-                case 2: return Opcode.OpcodeMultiply;
-                case 3: return Opcode.OpcodeReadInput;
-                case 4: return Opcode.OpcodeWriteOutput;
+                case 1: return Opcode.Add;
+                case 2: return Opcode.Multiply;
+                case 3: return Opcode.ReadInput;
+                case 4: return Opcode.WriteOutput;
+                case 5: return Opcode.JumpIfTrue;
+                case 6: return Opcode.JumpIfFalse;
+                case 7: return Opcode.EnableIfLessThan;
+                case 8: return Opcode.EnableIfEquals;
                 case 99: return Opcode.Halt;
                 default: throw new ArgumentException($"Unknown opcode {code}", nameof(code));
             }
