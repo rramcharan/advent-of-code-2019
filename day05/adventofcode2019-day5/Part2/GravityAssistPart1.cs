@@ -8,12 +8,14 @@ namespace adventofcode2019_day5.Part2
     public class GravityAssistPart2
     {
         private readonly Dictionary<int, int> _memory;
+        private readonly int[] _userInput;
         private int _instructionPointer;
         public StringBuilder Output = new StringBuilder();
 
-        private GravityAssistPart2(params int[] initialState)
+        private GravityAssistPart2(int[] initialState, int[] userInput)
         {
             _memory = new Dictionary<int, int>();
+            _userInput = userInput;
             if (initialState != null)
             {
                 for (int index = 0; index < initialState.Length; index++)
@@ -38,14 +40,18 @@ namespace adventofcode2019_day5.Part2
 
         public static GravityAssistPart2 Process(params int[] initialState)
         {
-            var result = new GravityAssistPart2(initialState);
+            return ProcessWithUserInput(initialState, null);
+        }
+        public static GravityAssistPart2 ProcessWithUserInput(int[] initialState, int[] userInput)
+        {
+            var result = new GravityAssistPart2(initialState, userInput);
             result.ProcessInstructions();
             return result;
         }
 
         public static GravityAssistPart2 RestoreGravityAsistAndProcessCodes(int noun, int verb, params int[] initialState)
         {
-            var result = new GravityAssistPart2(initialState);
+            var result = new GravityAssistPart2(initialState, null);
             result.RestoreGravityAsist(noun, verb);
             result.ProcessInstructions();
             return result;
@@ -88,7 +94,8 @@ namespace adventofcode2019_day5.Part2
                     InstructionPointerIncrement(4);
                     return true;
                 case Opcode.ReadInput:
-                    SetValue(1, instructionPointer + 1, instruction.ModeParam1);
+                    var userInput = NextUserInput();
+                    SetValue(userInput, instructionPointer + 1, instruction.ModeParam1);
                     InstructionPointerIncrement(2);
                     return true;
                 case Opcode.WriteOutput:
@@ -113,6 +120,20 @@ namespace adventofcode2019_day5.Part2
             }
 
             return false;
+        }
+
+        private int _userinputPointer = 0;
+        private int NextUserInput()
+        {
+            if (_userInput == null)
+                throw new Exception("No user input specified!");
+            if (_userinputPointer >= _userInput.Length)
+                throw new Exception($"No user input available at {_userinputPointer}!");
+
+            var value = _userInput[_userinputPointer];
+            _userinputPointer++;
+
+            return value;
         }
 
         private void JumpIfTrue(int instructionPointer, Instruction instruction)
