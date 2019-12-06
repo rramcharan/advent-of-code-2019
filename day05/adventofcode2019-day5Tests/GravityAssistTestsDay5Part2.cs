@@ -1,11 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using adventofcode2019_day5.Part1;
+using adventofcode2019_day5.Part2;
 
 namespace adventofcode2019_day5.Tests
 {
 
     [TestClass()]
-    public class GravityAssistTestsDay5Part1
+    public class GravityAssistTestsDay5Part2
     {
         #region Examples
 
@@ -19,7 +19,7 @@ namespace adventofcode2019_day5.Tests
             };
 
             // Act
-            var result = GravityAssistPart1.Process(input);
+            var result = GravityAssistPart2.Process(input);
 
             // Arrange
             Assert.AreEqual(1002, result.Code(0), "position 0 is unexpected");
@@ -39,7 +39,7 @@ namespace adventofcode2019_day5.Tests
             };
 
             // Act
-            var result = GravityAssistPart1.Process(input);
+            var result = GravityAssistPart2.Process(input);
 
             // Arrange
             Assert.AreEqual(1101, result.Code(0), "position 0 is unexpected");
@@ -63,7 +63,7 @@ namespace adventofcode2019_day5.Tests
             };
 
             // Act
-            var result = GravityAssistPart1.Process(input);
+            var result = GravityAssistPart2.Process(input);
 
             // Arrange
             Assert.AreEqual(4, result.Codes.Keys.Count, "unexpected number of elements");
@@ -87,7 +87,7 @@ namespace adventofcode2019_day5.Tests
             };
 
             // Act
-            var result = GravityAssistPart1.Process(input);
+            var result = GravityAssistPart2.Process(input);
 
             // Arrange
             Assert.AreEqual(3, result.Codes.Keys.Count, "unexpected number of elements");
@@ -108,7 +108,7 @@ HALT
             };
 
             // Act
-            var result = GravityAssistPart1.Process(input);
+            var result = GravityAssistPart2.Process(input);
 
             // Arrange
             Assert.AreEqual(3, result.Codes.Keys.Count, "unexpected number of elements");
@@ -132,7 +132,7 @@ HALT
             };
 
             // Act
-            var result = GravityAssistPart1.Process(input);
+            var result = GravityAssistPart2.Process(input);
 
             // Arrange
             Assert.AreEqual(@"0

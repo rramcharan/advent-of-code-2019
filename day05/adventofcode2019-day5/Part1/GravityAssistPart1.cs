@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace adventofcode2019_day5
+namespace adventofcode2019_day5.Part1
 {
     public class GravityAssistPart1
     {
-        private readonly Dictionary<int,int> _memory;
+        private readonly Dictionary<int, int> _memory;
         private int _instructionPointer;
         public StringBuilder Output = new StringBuilder();
 
@@ -119,11 +117,11 @@ namespace adventofcode2019_day5
                 var address1 = _memory[instructionPointer + 1];
                 var parameter1 = instruction.ModeParam1 == ParameterMode.Immediate ? address1 : _memory[address1];
                 SendToOutput(parameter1);
-            
+
                 _instructionPointer += 2;
                 return true;
             }
-            
+
             return false;
         }
 

@@ -43,9 +43,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GravityAssistPart1.cs" />
-    <Compile Include="Instruction.cs" />
-    <Compile Include="ParameterMode.cs" />
+    <Compile Include="Part2\GravityAssistPart1.cs" />
+    <Compile Include="Part2\Instruction.cs" />
+    <Compile Include="Part2\Opcode.cs" />
+    <Compile Include="Part2\ParameterMode.cs" />
+    <Compile Include="Part1\GravityAssistPart1.cs" />
+    <Compile Include="Part1\Instruction.cs" />
+    <Compile Include="Part1\ParameterMode.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

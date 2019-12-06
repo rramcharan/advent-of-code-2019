@@ -56,6 +56,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="GravityAssistTestsDay5Part2.cs" />
     <Compile Include="GravityAssistTestsDay5Part1.cs" />
     <Compile Include="GravityAssistTestsPart1.cs" />
     <Compile Include="InstructionTests.cs" />

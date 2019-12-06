@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace adventofcode2019_day5
+namespace adventofcode2019_day5.Part1
 {
     public class Instruction
     {
-        private Instruction(){}
+        private Instruction() { }
 
         public int Opcode { get; set; }
         public ParameterMode ModeParam1 { get; set; }
@@ -18,9 +14,9 @@ namespace adventofcode2019_day5
         {
             var result = new Instruction();
             result.Opcode = code % 100;
-            result.ModeParam1 = GetParameterMode((code / 100) % 10);
-            result.ModeParam2 = GetParameterMode((code / 1000) % 10);
-            result.ModeParam3 = GetParameterMode((code / 10000) % 10);
+            result.ModeParam1 = GetParameterMode(code / 100 % 10);
+            result.ModeParam2 = GetParameterMode(code / 1000 % 10);
+            result.ModeParam3 = GetParameterMode(code / 10000 % 10);
 
             return result;
         }
