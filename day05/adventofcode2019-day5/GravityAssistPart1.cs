@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,16 +9,22 @@ namespace adventofcode2019_day5
 {
     public class GravityAssistPart1
     {
-        private readonly int[] _memory;
+        private readonly Dictionary<int,int> _memory;
         private int _instructionPointer;
+        public StringBuilder Output = new StringBuilder();
 
         private GravityAssistPart1(params int[] initialState)
         {
-            _memory = initialState;
+            _memory = new Dictionary<int, int>();
+            if (initialState != null)
+            {
+                for (int index = 0; index < initialState.Length; index++)
+                    _memory[index] = initialState[index];
+            }
             _instructionPointer = 0;
         }
 
-        public int[] Codes => _memory;
+        public Dictionary<int, int> Codes => _memory;
 
         public int Code(int address) => _memory[address];
         public int Noun
@@ -54,7 +61,7 @@ namespace adventofcode2019_day5
 
         private void ProcessInstructions()
         {
-            while (ProcessInstruction())
+            while (ProcessNextInstruction())
             {
             }
 
@@ -62,14 +69,19 @@ namespace adventofcode2019_day5
 
         private readonly int OpcodeAdd = 1;
         private readonly int OpcodeMultiply = 2;
+        private readonly int OpcodeReadInput = 3;
+        private readonly int OpcodeWriteOutput = 4;
 
-        private bool ProcessInstruction()
+        private bool ProcessNextInstruction()
         {
             var instructionPointer = _instructionPointer;
             var instruction = Instruction.Parse(_memory[instructionPointer]);
             var opCode = instruction.Opcode;
-            if (opCode == 99) return false;
-
+            if (opCode == 99)
+            {
+                SendToOutput("HALT");
+                return false;
+            }
             if (opCode == OpcodeAdd || opCode == OpcodeMultiply)
             {
                 var address1 = _memory[instructionPointer + 1];
@@ -91,8 +103,38 @@ namespace adventofcode2019_day5
 
                 _instructionPointer += 4;
                 return true;
-            } 
+            }
+            else if (opCode == OpcodeReadInput)
+            {
+                var address1 = _memory[instructionPointer + 1];
+                if (instruction.ModeParam1 == ParameterMode.Immediate)
+                    throw new Exception("Opcode=3: First parameter should be a Position mode parameter");
+                _memory[address1] = 1;
+
+                _instructionPointer += 2;
+                return true;
+            }
+            else if (opCode == OpcodeWriteOutput)
+            {
+                var address1 = _memory[instructionPointer + 1];
+                var parameter1 = instruction.ModeParam1 == ParameterMode.Immediate ? address1 : _memory[address1];
+                SendToOutput(parameter1);
+            
+                _instructionPointer += 2;
+                return true;
+            }
+            
             return false;
+        }
+
+        private void SendToOutput(int number)
+        {
+            SendToOutput(number.ToString(CultureInfo.InvariantCulture));
+        }
+        private void SendToOutput(string text)
+        {
+            Output.AppendLine(text);
+            Console.WriteLine(text);
         }
     }
 }

@@ -125,9 +125,9 @@ namespace adventofcode2019_day5.Tests
         }
 
 
-        private void AreEqual(int[] expected, int[] actual)
+        private void AreEqual(int[] expected, Dictionary<int, int> actual)
         {
-            Assert.AreEqual(expected.Length, actual.Length, "Length check failed");
+            Assert.AreEqual(expected.Length, actual.Keys.Count, "Length check failed");
             for (var index = 0; index < expected.Length; index++)
             {
                 Assert.AreEqual(expected[index], actual[index], $"position {index} is unexpected");
