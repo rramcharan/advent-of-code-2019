@@ -33,8 +33,8 @@ namespace adventofcode2019_day5.Part2
                 case 4: return Opcode.WriteOutput;
                 case 5: return Opcode.JumpIfTrue;
                 case 6: return Opcode.JumpIfFalse;
-                case 7: return Opcode.EnableIfLessThan;
-                case 8: return Opcode.EnableIfEquals;
+                case 7: return Opcode.SetResetIfLessThan;
+                case 8: return Opcode.SetResetIfEquals;
                 case 99: return Opcode.Halt;
                 default: throw new ArgumentException($"Unknown opcode {code}", nameof(code));
             }

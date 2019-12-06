@@ -23,11 +23,11 @@ namespace adventofcode2019_day5.Part2
         /// <summary>
         /// Opcode 7 is less than: if the first parameter is less than the second parameter, it stores 1 in the position given by the third parameter. Otherwise, it stores 0
         /// </summary>
-        EnableIfLessThan = 7,
+        SetResetIfLessThan = 7,
         /// <summary>
         /// Opcode 8 is equals: if the first parameter is equal to the second parameter, it stores 1 in the position given by the third parameter. Otherwise, it stores 0
         /// </summary>
-        EnableIfEquals = 8,
+        SetResetIfEquals = 8,
         /// <summary>
         /// End execution
         /// </summary>

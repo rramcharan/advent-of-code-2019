@@ -122,6 +122,337 @@ HALT
 
         #endregion
 
+        #region Opcode 5 (jump-if-true)
+
+        [TestMethod()]
+        public void JumpIfTrue_NoJump_Test01()
+        {
+            // Arrange
+            var input = new int[]
+            {
+                1105,0,200,
+                4,0,
+                99
+            };
+
+            // Act
+            var result = GravityAssistPart2.Process(input);
+
+            // Arrange
+            Assert.AreEqual(6, result.Codes.Keys.Count, "unexpected number of elements");
+            Assert.AreEqual(1105, result.Code(0));
+            Assert.AreEqual(0, result.Code(1));
+            Assert.AreEqual(200, result.Code(2));
+            Assert.AreEqual(4, result.Code(3));
+            Assert.AreEqual(0, result.Code(4));
+            Assert.AreEqual(99, result.Code(5));
+            Assert.AreEqual(@"1105
+HALT
+", result.Output.ToString());
+        }
+
+        [TestMethod()]
+        public void JumpIfTrue_Jump_Test01()
+        {
+            // Arrange
+            var input = new int[]
+            {
+                1105,1,5,
+                1104,100,
+                1104,200,
+                99
+            };
+
+            // Act
+            var result = GravityAssistPart2.Process(input);
+
+            // Arrange
+            Assert.AreEqual(8, result.Codes.Keys.Count, "unexpected number of elements");
+            Assert.AreEqual(@"200
+HALT
+", result.Output.ToString());
+        }
+
+        #endregion
+
+        #region Opcode 6 (jump-if-false)
+
+        [TestMethod()]
+        public void JumpIfFalse_NoJump_Test01()
+        {
+            // Arrange
+            var input = new int[]
+            {
+                1106,1,200,
+                104,4,
+                99
+            };
+
+            // Act
+            var result = GravityAssistPart2.Process(input);
+
+            // Arrange
+            Assert.AreEqual(6, result.Codes.Keys.Count, "unexpected number of elements");
+            Assert.AreEqual(@"4
+HALT
+", result.Output.ToString());
+        }
+
+        [TestMethod()]
+        public void JumpIfFalse_Jump_Test01()
+        {
+            // Arrange
+            var input = new int[]
+            {
+                1106,0,5,
+                4,0,
+                4,7,
+                99
+            };
+
+            // Act
+            var result = GravityAssistPart2.Process(input);
+
+            // Arrange
+            Assert.AreEqual(8, result.Codes.Keys.Count, "unexpected number of elements");
+            Assert.AreEqual(@"99
+HALT
+", result.Output.ToString());
+        }
+
+        #endregion
+
+        #region Opcode 7 (less than)
+
+        [TestMethod()]
+        public void LessThan_Set_Test01()
+        {
+            // Arrange
+            var input = new int[]
+            {
+                1107,1,2,2,
+                99
+            };
+
+            // Act
+            var result = GravityAssistPart2.Process(input);
+
+            // Arrange
+            Assert.AreEqual(5, result.Codes.Keys.Count, "unexpected number of elements");
+            Assert.AreEqual(1107, result.Code(0));
+            Assert.AreEqual(1, result.Code(1));
+            Assert.AreEqual(1, result.Code(2));
+            Assert.AreEqual(2, result.Code(3));
+            Assert.AreEqual(99, result.Code(4));
+        }
+
+        [TestMethod()]
+        public void LessThan_Set_Test02()
+        {
+            // Arrange
+            var input = new int[]
+            {
+                1107,200,300,5,
+                99
+            };
+
+            // Act
+            var result = GravityAssistPart2.Process(input);
+
+            // Arrange
+            Assert.AreEqual(6, result.Codes.Keys.Count, "unexpected number of elements");
+            Assert.AreEqual(1107, result.Code(0));
+            Assert.AreEqual(200, result.Code(1));
+            Assert.AreEqual(300, result.Code(2));
+            Assert.AreEqual(5, result.Code(3));
+            Assert.AreEqual(99, result.Code(4));
+            Assert.AreEqual(1, result.Code(5));
+        }
+
+        [TestMethod()]
+        public void LessThan_Reset_Test01()
+        {
+            // Arrange
+            var input = new int[]
+            {
+                1107,3,2,2,
+                99
+            };
+
+            // Act
+            var result = GravityAssistPart2.Process(input);
+
+            // Arrange
+            Assert.AreEqual(5, result.Codes.Keys.Count, "unexpected number of elements");
+            Assert.AreEqual(1107, result.Code(0));
+            Assert.AreEqual(3, result.Code(1));
+            Assert.AreEqual(0, result.Code(2));
+            Assert.AreEqual(2, result.Code(3));
+            Assert.AreEqual(99, result.Code(4));
+        }
+
+        [TestMethod()]
+        public void LessThan_Reset_Test02()
+        {
+            // Arrange
+            var input = new int[]
+            {
+                1107,400,300,5,
+                99
+            };
+
+            // Act
+            var result = GravityAssistPart2.Process(input);
+
+            // Arrange
+            Assert.AreEqual(6, result.Codes.Keys.Count, "unexpected number of elements");
+            Assert.AreEqual(1107, result.Code(0));
+            Assert.AreEqual(400, result.Code(1));
+            Assert.AreEqual(300, result.Code(2));
+            Assert.AreEqual(5, result.Code(3));
+            Assert.AreEqual(99, result.Code(4));
+            Assert.AreEqual(0, result.Code(5));
+        }
+
+        [TestMethod()]
+        public void LessThan_Reset_OnEqueal_Test01()
+        {
+            // Arrange
+            var input = new int[]
+            {
+                1107,400,400,5,
+                99
+            };
+
+            // Act
+            var result = GravityAssistPart2.Process(input);
+
+            // Arrange
+            Assert.AreEqual(6, result.Codes.Keys.Count, "unexpected number of elements");
+            Assert.AreEqual(1107, result.Code(0));
+            Assert.AreEqual(400, result.Code(1));
+            Assert.AreEqual(400, result.Code(2));
+            Assert.AreEqual(5, result.Code(3));
+            Assert.AreEqual(99, result.Code(4));
+            Assert.AreEqual(0, result.Code(5));
+        }
+        #endregion
+
+        #region Opcode 8 (equal)
+
+        [TestMethod()]
+        public void Equal_Set_Test01()
+        {
+            // Arrange
+            var input = new int[]
+            {
+                1108,10,10,2,
+                99
+            };
+
+            // Act
+            var result = GravityAssistPart2.Process(input);
+
+            // Arrange
+            Assert.AreEqual(5, result.Codes.Keys.Count, "unexpected number of elements");
+            Assert.AreEqual(1108, result.Code(0));
+            Assert.AreEqual(10, result.Code(1));
+            Assert.AreEqual(1, result.Code(2));
+            Assert.AreEqual(2, result.Code(3));
+            Assert.AreEqual(99, result.Code(4));
+        }
+
+        [TestMethod()]
+        public void Equal_Set_Test02()
+        {
+            // Arrange
+            var input = new int[]
+            {
+                0108,300,1,5,
+                99,
+            };
+
+            // Act
+            var result = GravityAssistPart2.Process(input);
+
+            // Arrange
+            Assert.AreEqual(6, result.Codes.Keys.Count, "unexpected number of elements");
+            Assert.AreEqual(0108, result.Code(0));
+            Assert.AreEqual(300, result.Code(1));
+            Assert.AreEqual(1, result.Code(2));
+            Assert.AreEqual(5, result.Code(3));
+            Assert.AreEqual(99, result.Code(4));
+            Assert.AreEqual(1, result.Code(5));
+        }
+
+        [TestMethod()]
+        public void Equal_NotEqual_Reset_Test01()
+        {
+            // Arrange
+            var input = new int[]
+            {
+                8,0,2,2,
+                99
+            };
+
+            // Act
+            var result = GravityAssistPart2.Process(input);
+
+            // Arrange
+            Assert.AreEqual(5, result.Codes.Keys.Count, "unexpected number of elements");
+            Assert.AreEqual(8, result.Code(0));
+            Assert.AreEqual(0, result.Code(1));
+            Assert.AreEqual(0, result.Code(2));
+            Assert.AreEqual(2, result.Code(3));
+            Assert.AreEqual(99, result.Code(4));
+        }
+
+        [TestMethod()]
+        public void Equal_NotEqual_Reset_Test02()
+        {
+            // Arrange
+            var input = new int[]
+            {
+                1108,4,2,2,
+                99
+            };
+
+            // Act
+            var result = GravityAssistPart2.Process(input);
+
+            // Arrange
+            Assert.AreEqual(5, result.Codes.Keys.Count, "unexpected number of elements");
+            Assert.AreEqual(1108, result.Code(0));
+            Assert.AreEqual(4, result.Code(1));
+            Assert.AreEqual(0, result.Code(2));
+            Assert.AreEqual(2, result.Code(3));
+            Assert.AreEqual(99, result.Code(4));
+        }
+
+        [TestMethod()]
+        public void Equal_NotEqual_Reset_Test03()
+        {// Arrange
+            var input = new int[]
+            {
+                1008,4,77,2,
+                99
+            };
+
+            // Act
+            var result = GravityAssistPart2.Process(input);
+
+            // Arrange
+            Assert.AreEqual(5, result.Codes.Keys.Count, "unexpected number of elements");
+            Assert.AreEqual(1008, result.Code(0));
+            Assert.AreEqual(4, result.Code(1));
+            Assert.AreEqual(0, result.Code(2));
+            Assert.AreEqual(2, result.Code(3));
+            Assert.AreEqual(99, result.Code(4));
+        }
+
+        #endregion
+
+
         #region Puzzle
         [TestMethod()]
         public void Puzzle()
