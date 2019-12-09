@@ -1,4 +1,4 @@
-﻿using adventofcode2019_day5.Part2;
+﻿using adventofcode2019_day7.Day5;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System;

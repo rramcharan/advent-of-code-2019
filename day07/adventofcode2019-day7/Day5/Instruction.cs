@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace adventofcode2019_day5.Part2
+namespace adventofcode2019_day7.Day5
 {
     public class Instruction
     {

@@ -1,13 +1,13 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using adventofcode2019_day5.Part2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Shouldly;
+using adventofcode2019_day7.Day5;
 
-namespace adventofcode2019_day5.Part2.Tests
+namespace adventofcode2019_day7Tests.Day5
 {
     [TestClass()]
     public class GravityAssistTestsDay5Part2

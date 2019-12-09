@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace adventofcode2019_day5.Part2
+namespace adventofcode2019_day7.Day5
 {
     public enum Opcode:int
     {
