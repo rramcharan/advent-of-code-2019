@@ -43,6 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Part2\Orbit.cs" />
+    <Compile Include="Part2\OrbitCounter.cs" />
+    <Compile Include="Part2\OrbitMap.cs" />
+    <Compile Include="Part2\OrbitRelation.cs" />
     <Compile Include="Part1\Orbit.cs" />
     <Compile Include="Part1\OrbitCounterNotProper.cs" />
     <Compile Include="Part1\OrbitCounter.cs" />
