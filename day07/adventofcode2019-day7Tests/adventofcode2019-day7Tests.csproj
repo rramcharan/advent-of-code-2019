@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="Day5\GravityAssistPart2Tests.cs" />
     <Compile Include="Part1\GravityAssistDay7Part1Tests.cs" />
+    <Compile Include="Part1\GravityAssistDay5Part2Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

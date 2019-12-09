@@ -47,14 +47,16 @@
     <Compile Include="Day5\Instruction.cs" />
     <Compile Include="Day5\Opcode.cs" />
     <Compile Include="Day5\ParameterMode.cs" />
+    <Compile Include="Part1\GravityAssistPart1.cs" />
+    <Compile Include="Part1\Instruction.cs" />
+    <Compile Include="Part1\Opcode.cs" />
+    <Compile Include="Part1\ParameterMode.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Part1\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
