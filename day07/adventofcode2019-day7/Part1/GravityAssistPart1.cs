@@ -58,6 +58,7 @@ namespace adventofcode2019_day7.Part1
             return result;
         }
 
+        #region private methods
         private void RestoreGravityAsist(int noun, int verb)
         {
             Noun = noun;
@@ -230,10 +231,7 @@ namespace adventofcode2019_day7.Part1
             Output.Add(number);
             //SendToOutput(number.ToString(CultureInfo.InvariantCulture));
         }
-        //private void SendToOutput(string text)
-        //{
-        //    OutputConsole.AppendLine(text);
-        //    Console.WriteLine(text);
-        //}
+
+        #endregion
     }
 }
