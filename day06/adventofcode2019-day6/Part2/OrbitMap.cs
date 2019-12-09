@@ -80,6 +80,7 @@ namespace adventofcode2019_day6.Part2
             foreach(var orbit in Orbits.Values)
             {
                 var orbitCounter = new OrbitCounter(Orbits, Root, orbit);
+                Console.WriteLine($"{orbit.Name}: {orbitCounter.Count}");
                 list[orbit.Name] = orbitCounter;
                 count += orbitCounter.Count;
             }
@@ -102,5 +103,33 @@ namespace adventofcode2019_day6.Part2
             return counter.Count;
         }
 
+        public int TransfersCount(string from, string to)
+        {
+            if (from.Equals(to)) return 0;
+
+            var fromOrbit = GetOrbitByName(from);
+            var toOrbit = GetOrbitByName(to);
+
+            var fromOrbitCounters = new OrbitCounter(Orbits, Root, fromOrbit);
+            var toOrbitCounters = new OrbitCounter(Orbits, Root, toOrbit);
+
+            int? minTransfers = null;
+            foreach (var aOrbit in fromOrbitCounters.ConnectedOrbits.Keys)
+            {
+                if (toOrbitCounters.ConnectedOrbits.ContainsKey(aOrbit))
+                {
+                    var transfers =
+                        fromOrbitCounters.ConnectedOrbits[from] - fromOrbitCounters.ConnectedOrbits[aOrbit] -1
+                        +
+                        toOrbitCounters.ConnectedOrbits[to] - toOrbitCounters.ConnectedOrbits[aOrbit] -1;
+                    if (minTransfers == null || minTransfers > transfers)
+                        minTransfers = transfers;
+                }
+            }
+            if (minTransfers.HasValue)
+                return minTransfers.Value;
+            throw new Exception($"Can't tranfser from {from} to {to}");
+
+        }
     }
 }

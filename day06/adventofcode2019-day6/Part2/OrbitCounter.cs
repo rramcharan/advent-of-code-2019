@@ -11,23 +11,31 @@ namespace adventofcode2019_day6.Part2
 
         private List<string> Routes = new List<string>();
         private Orbit _Root;
+        private Orbit _orbit;
 
         public OrbitCounter(Dictionary<string, Orbit> orbits, Orbit root, Orbit orbit)
         {
             _allOrbits = orbits;
             _Root = root;
+            _orbit = orbit;
             ConnectedOrbits = new Dictionary<string, int>();
             CountConnectedOrbits(orbit);
         }
 
         private void CountConnectedOrbits(Orbit orbit)
         {
+            if (orbit == null) return;
             if (ConnectedOrbits.ContainsKey(orbit.Name)) return;
 
             ConnectedOrbits[orbit.Name] = orbit.CountConnections;
+
+            foreach(var arround in orbit.Arounds)
+            {
+                CountConnectedOrbits(arround);
+            }
         }
 
-        public int Count => ConnectedOrbits.Values.Sum(); 
+        public int Count => ConnectedOrbits[_orbit.Name]; 
 
         //private void TotalNumberOfOrbits(int offset, Orbit orbit)
         //{
