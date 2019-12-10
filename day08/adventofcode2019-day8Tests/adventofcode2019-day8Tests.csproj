@@ -60,6 +60,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Day8Part2\SpaceImagePart2Tests.cs" />
     <Compile Include="Day8Part1\SpaceImageTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace adventofcode2019_day8.Day8Part1
+namespace adventofcode2019_day8.Day8Part2
 {
     public class SpaceImage
     {
@@ -70,31 +70,6 @@ namespace adventofcode2019_day8.Day8Part1
             var nbrOf2 = layer.CountDigits[2];
 
             return nbrOf1 * nbrOf2;
-        }
-
-        public Layer GetImage()
-        {
-            var image = new Layer(0, _width, _height);
-            for (var idx = 0; idx < _width * _height; idx++)
-            {
-                image.AddDigit(idx, GetImageDigit(idx));
-            }
-            return image;
-        }
-
-        private int GetImageDigit(int idx)
-        {
-            for(var layerIdx=0; layerIdx < Layers.Count; layerIdx++)
-            {
-                var layer = Layers[layerIdx];
-                var digit = layer.Map[idx];
-                if (digit == 0) return 0;
-                if (digit == 1) return 1;
-                if (digit == 2) continue;
-
-                throw new Exception($"Unexpected digit '{Layers[layerIdx].Map[idx]}'. Expected 0,1 or 2");
-            }
-            throw new Exception($"Could not find a digit at index {idx}. Should be one of: 0,1 and 2");
         }
     }
 }
