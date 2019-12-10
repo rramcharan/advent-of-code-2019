@@ -5,58 +5,127 @@ using System.Text;
 
 namespace adventofcode2019_day7.Part1
 {
-    public class GravityAssistPart2
+    public class IntCodeComputer
     {
-        private readonly Dictionary<int, int> _memory;
-        private readonly int[] _userInput;
+        public string Name { get; private set; }
+        private Dictionary<int, int> _intCodes;
+        private Queue<int> _userInput;
         private int _instructionPointer;
         public List<int> Output = new List<int>();
         public StringBuilder OutputConsole = new StringBuilder();
 
-        private GravityAssistPart2(int[] initialState, int[] userInput)
+        #region Ctor...
+
+        private IntCodeComputer(int[] intCodes) :this(intCodes, null)
         {
-            _memory = new Dictionary<int, int>();
-            _userInput = userInput;
-            if (initialState != null)
-            {
-                for (int index = 0; index < initialState.Length; index++)
-                    _memory[index] = initialState[index];
-            }
-            _instructionPointer = 0;
         }
 
-        public Dictionary<int, int> Codes => _memory;
+        private IntCodeComputer(int[] intCodes, int[] userInput)
+        {
+            Name="?";
+            InitIntCodes(intCodes);
+            InitInput(userInput);
+            _instructionPointer = 0;
+        }
+        #endregion
 
-        public int Code(int address) => _memory[address];
+        #region Init...
+
+        private void InitIntCodes(int[] intCodes)
+        {
+            _intCodes = new Dictionary<int, int>();
+            if (intCodes != null)
+            {
+                for (int index = 0; index < intCodes.Length; index++)
+                    _intCodes[index] = intCodes[index];
+            }
+        }
+
+        private void InitInput(int[] userInput)
+        {
+            _userInput = new Queue<int>();
+            SetInput(userInput);
+        }
+
+        private void SetInput(int[] userInput)
+        {
+            if (_userInput.Count>0)
+                throw new Exception("Computer has input arguments queued. Can't re-initialise!");
+
+            if (userInput == null) return;
+            if (userInput.Length == 0) return;
+
+            foreach (var input in userInput)
+                AddInput(input);
+        }
+
+        public void AddInput(int input)
+        {
+            _userInput.Enqueue(input);
+        }
+        #endregion
+
+        public bool IsHalted { get; private set; }
+        public bool IsWaitingForInput { get; private set; }
+
+        public Dictionary<int, int> Codes => _intCodes;
+
+        public int Code(int address) => _intCodes[address];
         public int Noun
         {
-            get => _memory[1];
-            set { _memory[1] = value; }
+            get => _intCodes[1];
+            set { _intCodes[1] = value; }
         }
         public int Verb
         {
-            get => _memory[2];
-            set { _memory[2] = value; }
+            get => _intCodes[2];
+            set { _intCodes[2] = value; }
         }
+        
+        public static IntCodeComputer Create(string name, int[] intCodes, int[] userInput)
+        {
+            var computer = new IntCodeComputer(intCodes, userInput);
+            computer.Name = name;
 
-        public static GravityAssistPart2 Process(params int[] initialState)
-        {
-            return ProcessWithUserInput(initialState, null);
+            return computer;
         }
-        public static GravityAssistPart2 ProcessWithUserInput(int[] initialState, int[] userInput)
+        public static IntCodeComputer Create(params int[] intCodes)
         {
-            var result = new GravityAssistPart2(initialState, userInput);
+            return new IntCodeComputer(intCodes);
+
+        }
+        public static IntCodeComputer Process(params int[] intCodes)
+        {
+            return ProcessWithUserInput(intCodes, null);
+        }
+        public static IntCodeComputer ProcessWithUserInput(int[] intCodes, int[] userInput)
+        {
+            var result = new IntCodeComputer(intCodes, userInput);
             result.ProcessInstructions();
             return result;
         }
 
-        public static GravityAssistPart2 RestoreGravityAsistAndProcessCodes(int noun, int verb, params int[] initialState)
+        public static IntCodeComputer RestoreGravityAsistAndProcessCodes(int noun, int verb, params int[] initialState)
         {
-            var result = new GravityAssistPart2(initialState, null);
+            var result = new IntCodeComputer(initialState, null);
             result.RestoreGravityAsist(noun, verb);
             result.ProcessInstructions();
             return result;
         }
+
+        public void ProcessWithUserInput(int[] userInput)
+        {
+            InitInput(userInput);
+            ProcessInstructions();
+        }
+
+        public void Process()
+        {
+            Console.WriteLine($"Run code on {Name}");
+            Output.Clear();
+            ProcessInstructions();
+        }
+
 
         #region private methods
         private void RestoreGravityAsist(int noun, int verb)
@@ -67,6 +136,7 @@ namespace adventofcode2019_day7.Part1
 
         private void ProcessInstructions()
         {
+            IsWaitingForInput = false;
             while (ProcessNextInstruction())
             {
             }
@@ -76,9 +146,9 @@ namespace adventofcode2019_day7.Part1
         private bool ProcessNextInstruction()
         {
             var instructionPointer = _instructionPointer;
-            var instruction = Instruction.Parse(_memory[instructionPointer]);
+            var instruction = Instruction.Parse(_intCodes[instructionPointer]);
             var opCode = instruction.Opcode;
-            
+
             switch (opCode)
             {
                 case Opcode.Add:
@@ -96,10 +166,15 @@ namespace adventofcode2019_day7.Part1
                     InstructionPointerIncrement(4);
                     return true;
                 case Opcode.ReadInput:
-                    var userInput = NextUserInput();
-                    SetValue(userInput, instructionPointer + 1, instruction.ModeParam1);
-                    InstructionPointerIncrement(2);
-                    return true;
+                    if (NextUserInputAvailable())
+                    {
+                        var userInput = NextUserInput();
+                        SetValue(userInput, instructionPointer + 1, instruction.ModeParam1);
+                        InstructionPointerIncrement(2);
+                        return true;
+                    }
+                    IsWaitingForInput = true;
+                    return false;
                 case Opcode.WriteOutput:
                     SendToOutput(GetValue(instructionPointer + 1, instruction.ModeParam1));
                     InstructionPointerIncrement(2);
@@ -117,25 +192,21 @@ namespace adventofcode2019_day7.Part1
                     SetResetIfEquals(instructionPointer, instruction);
                     return true;
                 case Opcode.Halt:
-                    //SendToOutput("HALT");
+                    IsHalted = true;
                     return false;
             }
 
             return false;
         }
 
-        private int _userinputPointer = 0;
-        private int NextUserInput()
+        public bool NextUserInputAvailable()
         {
-            if (_userInput == null)
-                throw new Exception("No user input specified!");
-            if (_userinputPointer >= _userInput.Length)
-                throw new Exception($"No user input available at {_userinputPointer}!");
-
-            var value = _userInput[_userinputPointer];
-            _userinputPointer++;
-
-            return value;
+            return _userInput.Count > 0;
+        }
+        public int NextUserInput()
+        {
+            var input = _userInput.Dequeue();
+            return input;
         }
 
         private void JumpIfTrue(int instructionPointer, Instruction instruction)
@@ -212,8 +283,8 @@ namespace adventofcode2019_day7.Part1
 
         private int GetValue(int from, ParameterMode mode)
         {
-            var address = _memory[from];
-            var value = mode == ParameterMode.Immediate ? address : _memory[address];
+            var address = _intCodes[from];
+            var value = mode == ParameterMode.Immediate ? address : _intCodes[address];
             return value;
         }
 
@@ -222,8 +293,8 @@ namespace adventofcode2019_day7.Part1
             if (mode == ParameterMode.Immediate)
                 throw new Exception("Parameter should be a Position mode parameter");
 
-            var address = _memory[at];
-            _memory[address] = value;
+            var address = _intCodes[at];
+            _intCodes[address] = value;
         }
 
         private void SendToOutput(int number)

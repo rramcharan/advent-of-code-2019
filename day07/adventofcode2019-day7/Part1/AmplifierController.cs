@@ -27,21 +27,21 @@ namespace adventofcode2019_day7.Part1
 
         private void Run(int[] code, int seq1, int seq2, int seq3, int seq4, int seq5)
         {
-            //var resultAmp1 = GravityAssistPart2.ProcessWithUserInput(Clone(code), new int[] { seq1, 0 });
-            //var resultAmp2 = GravityAssistPart2.ProcessWithUserInput(Clone(code), SetInput(seq2, resultAmp1.Output));
-            //var resultAmp3 = GravityAssistPart2.ProcessWithUserInput(Clone(code), SetInput(seq3, resultAmp2.Output));
-            //var resultAmp4 = GravityAssistPart2.ProcessWithUserInput(Clone(code), SetInput(seq4, resultAmp3.Output));
-            //var resultAmp5 = GravityAssistPart2.ProcessWithUserInput(Clone(code), SetInput(seq5, resultAmp4.Output));
             int? maxThrusterSignal = null;
             var seqCombinations = new AmplifierController().AllCombination(seq1, seq2, seq3, seq4, seq5);
 
             foreach (var seq in seqCombinations)
             {
-                var resultAmp1 = GravityAssistPart2.ProcessWithUserInput(Clone(code), new int[] { seq[0], 0 });
-                var resultAmp2 = GravityAssistPart2.ProcessWithUserInput(Clone(code), SetInput(seq[1], resultAmp1.Output));
-                var resultAmp3 = GravityAssistPart2.ProcessWithUserInput(Clone(code), SetInput(seq[2], resultAmp2.Output));
-                var resultAmp4 = GravityAssistPart2.ProcessWithUserInput(Clone(code), SetInput(seq[3], resultAmp3.Output));
-                var resultAmp5 = GravityAssistPart2.ProcessWithUserInput(Clone(code), SetInput(seq[4], resultAmp4.Output));
+                var resultAmp1 = IntCodeComputer.ProcessWithUserInput(Clone(code), new int[] { seq[0], 0 });
+                var resultAmp2 = IntCodeComputer.ProcessWithUserInput(Clone(code), SetInput(seq[1], resultAmp1.Output));
+                var resultAmp3 = IntCodeComputer.ProcessWithUserInput(Clone(code), SetInput(seq[2], resultAmp2.Output));
+                var resultAmp4 = IntCodeComputer.ProcessWithUserInput(Clone(code), SetInput(seq[3], resultAmp3.Output));
+                var resultAmp5 = IntCodeComputer.ProcessWithUserInput(Clone(code), SetInput(seq[4], resultAmp4.Output));
+
+                if (!(resultAmp1.IsHalted && resultAmp2.IsHalted && resultAmp3.IsHalted && resultAmp4.IsHalted && resultAmp5.IsHalted))
+                {
+                    throw new Exception("amp1 is halted, while at least one amp is not halted");
+                }
 
                 var output = resultAmp5.Output;
                 if (output.Count != 1)

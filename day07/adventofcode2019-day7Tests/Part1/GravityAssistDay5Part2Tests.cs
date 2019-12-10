@@ -24,7 +24,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.Process(input);
+            var result = IntCodeComputer.Process(input);
 
             // Arrange
             Assert.AreEqual(1002, result.Code(0), "position 0 is unexpected");
@@ -45,7 +45,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.Process(input);
+            var result = IntCodeComputer.Process(input);
 
             // Arrange
             Assert.AreEqual(1101, result.Code(0), "position 0 is unexpected");
@@ -69,7 +69,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.ProcessWithUserInput(input, new int[] { 1 });
+            var result = IntCodeComputer.ProcessWithUserInput(input, new int[] { 1 });
 
             // Arrange
             Assert.AreEqual(4, result.Codes.Keys.Count, "unexpected number of elements");
@@ -92,7 +92,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.Process(input);
+            var result = IntCodeComputer.Process(input);
 
             // Arrange
             Assert.AreEqual(3, result.Codes.Keys.Count, "unexpected number of elements");
@@ -111,7 +111,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.Process(input);
+            var result = IntCodeComputer.Process(input);
 
             // Arrange
             Assert.AreEqual(3, result.Codes.Keys.Count, "unexpected number of elements");
@@ -136,7 +136,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.Process(input);
+            var result = IntCodeComputer.Process(input);
 
             // Arrange
             Assert.AreEqual(6, result.Codes.Keys.Count, "unexpected number of elements");
@@ -162,7 +162,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.Process(input);
+            var result = IntCodeComputer.Process(input);
 
             // Arrange
             Assert.AreEqual(8, result.Codes.Keys.Count, "unexpected number of elements");
@@ -185,7 +185,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.Process(input);
+            var result = IntCodeComputer.Process(input);
 
             // Arrange
             Assert.AreEqual(6, result.Codes.Keys.Count, "unexpected number of elements");
@@ -205,7 +205,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.Process(input);
+            var result = IntCodeComputer.Process(input);
 
             // Arrange
             Assert.AreEqual(8, result.Codes.Keys.Count, "unexpected number of elements");
@@ -227,7 +227,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.Process(input);
+            var result = IntCodeComputer.Process(input);
 
             // Arrange
             Assert.AreEqual(5, result.Codes.Keys.Count, "unexpected number of elements");
@@ -249,7 +249,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.Process(input);
+            var result = IntCodeComputer.Process(input);
 
             // Arrange
             Assert.AreEqual(6, result.Codes.Keys.Count, "unexpected number of elements");
@@ -272,7 +272,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.Process(input);
+            var result = IntCodeComputer.Process(input);
 
             // Arrange
             Assert.AreEqual(5, result.Codes.Keys.Count, "unexpected number of elements");
@@ -294,7 +294,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.Process(input);
+            var result = IntCodeComputer.Process(input);
 
             // Arrange
             Assert.AreEqual(6, result.Codes.Keys.Count, "unexpected number of elements");
@@ -317,7 +317,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.Process(input);
+            var result = IntCodeComputer.Process(input);
 
             // Arrange
             Assert.AreEqual(6, result.Codes.Keys.Count, "unexpected number of elements");
@@ -343,7 +343,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.Process(input);
+            var result = IntCodeComputer.Process(input);
 
             // Arrange
             Assert.AreEqual(5, result.Codes.Keys.Count, "unexpected number of elements");
@@ -365,7 +365,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.Process(input);
+            var result = IntCodeComputer.Process(input);
 
             // Arrange
             Assert.AreEqual(6, result.Codes.Keys.Count, "unexpected number of elements");
@@ -388,7 +388,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.Process(input);
+            var result = IntCodeComputer.Process(input);
 
             // Arrange
             Assert.AreEqual(5, result.Codes.Keys.Count, "unexpected number of elements");
@@ -410,7 +410,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.Process(input);
+            var result = IntCodeComputer.Process(input);
 
             // Arrange
             Assert.AreEqual(5, result.Codes.Keys.Count, "unexpected number of elements");
@@ -431,7 +431,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.Process(input);
+            var result = IntCodeComputer.Process(input);
 
             // Arrange
             Assert.AreEqual(5, result.Codes.Keys.Count, "unexpected number of elements");
@@ -454,7 +454,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.ProcessWithUserInput(input, new int[] { 8 });
+            var result = IntCodeComputer.ProcessWithUserInput(input, new int[] { 8 });
 
             // Arrange
             result.Output.ShouldBe(new List<int> { 1 });
@@ -469,7 +469,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.ProcessWithUserInput(input, new int[] { 4 });
+            var result = IntCodeComputer.ProcessWithUserInput(input, new int[] { 4 });
 
             // Arrange
             result.Output.ShouldBe(new List<int> { 0 });
@@ -484,7 +484,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.ProcessWithUserInput(input, new int[] { 6 });
+            var result = IntCodeComputer.ProcessWithUserInput(input, new int[] { 6 });
 
             // Arrange
             result.Output.ShouldBe(new List<int> { 1 });
@@ -499,7 +499,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.ProcessWithUserInput(input, new int[] { 8 });
+            var result = IntCodeComputer.ProcessWithUserInput(input, new int[] { 8 });
 
             // Arrange
             result.Output.ShouldBe(new List<int> { 0 });
@@ -514,7 +514,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.ProcessWithUserInput(input, new int[] { 16 });
+            var result = IntCodeComputer.ProcessWithUserInput(input, new int[] { 16 });
 
             // Arrange
             result.Output.ShouldBe(new List<int> { 0 });
@@ -529,7 +529,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.ProcessWithUserInput(input, new int[] { 8 });
+            var result = IntCodeComputer.ProcessWithUserInput(input, new int[] { 8 });
 
             // Arrange
             result.Output.ShouldBe(new List<int> { 1 });
@@ -544,7 +544,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.ProcessWithUserInput(input, new int[] { 7 });
+            var result = IntCodeComputer.ProcessWithUserInput(input, new int[] { 7 });
 
             // Arrange
             result.Output.ShouldBe(new List<int> { 0 });
@@ -559,7 +559,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.ProcessWithUserInput(input, new int[] { 9 });
+            var result = IntCodeComputer.ProcessWithUserInput(input, new int[] { 9 });
 
             // Arrange
             result.Output.ShouldBe(new List<int> { 0 });
@@ -574,7 +574,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.ProcessWithUserInput(input, new int[] { 7 });
+            var result = IntCodeComputer.ProcessWithUserInput(input, new int[] { 7 });
 
             // Arrange
             result.Output.ShouldBe(new List<int> { 1 });
@@ -589,7 +589,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.ProcessWithUserInput(input, new int[] { 8 });
+            var result = IntCodeComputer.ProcessWithUserInput(input, new int[] { 8 });
 
             // Arrange
             result.Output.ShouldBe(new List<int> { 0 });
@@ -604,7 +604,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.ProcessWithUserInput(input, new int[] { 9 });
+            var result = IntCodeComputer.ProcessWithUserInput(input, new int[] { 9 });
 
             // Arrange
             result.Output.ShouldBe(new List<int> { 0 });
@@ -619,7 +619,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.ProcessWithUserInput(input, new int[] { 0 });
+            var result = IntCodeComputer.ProcessWithUserInput(input, new int[] { 0 });
 
             // Arrange
             result.Output.ShouldBe(new List<int> { 0 });
@@ -634,7 +634,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.ProcessWithUserInput(input, new int[] { 1 });
+            var result = IntCodeComputer.ProcessWithUserInput(input, new int[] { 1 });
 
             // Arrange
             result.Output.ShouldBe(new List<int> { 1 });
@@ -649,7 +649,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.ProcessWithUserInput(input, new int[] { 2 });
+            var result = IntCodeComputer.ProcessWithUserInput(input, new int[] { 2 });
 
             // Arrange
             result.Output.ShouldBe(new List<int> { 1 });
@@ -664,7 +664,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.ProcessWithUserInput(input, new int[] { 0 });
+            var result = IntCodeComputer.ProcessWithUserInput(input, new int[] { 0 });
 
             // Arrange
             result.Output.ShouldBe(new List<int> { 0 });
@@ -679,7 +679,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.ProcessWithUserInput(input, new int[] { 100 });
+            var result = IntCodeComputer.ProcessWithUserInput(input, new int[] { 100 });
 
             // Arrange
             result.Output.ShouldBe(new List<int> { 1 });
@@ -696,7 +696,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.ProcessWithUserInput(input, new int[] { 7 });
+            var result = IntCodeComputer.ProcessWithUserInput(input, new int[] { 7 });
 
             // Arrange
             result.Output.ShouldBe(new List<int> { 999 });
@@ -713,7 +713,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.ProcessWithUserInput(input, new int[] { 8 });
+            var result = IntCodeComputer.ProcessWithUserInput(input, new int[] { 8 });
 
             // Arrange
             result.Output.ShouldBe(new List<int> { 1000 });
@@ -731,7 +731,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.ProcessWithUserInput(input, new int[] { 9 });
+            var result = IntCodeComputer.ProcessWithUserInput(input, new int[] { 9 });
 
             // Arrange
             result.Output.ShouldBe(new List<int> { 1001 });
@@ -750,7 +750,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.ProcessWithUserInput(input, new int[] { 1 });
+            var result = IntCodeComputer.ProcessWithUserInput(input, new int[] { 1 });
 
             // Arrange
             result.Output.ShouldBe(new List<int> { 0, 0, 0, 0, 0, 0, 0, 0, 0, 16489636 });
@@ -765,7 +765,7 @@ namespace adventofcode2019_day7Tests.Part1
             };
 
             // Act
-            var result = GravityAssistPart2.ProcessWithUserInput(input, new int[] { 5 });
+            var result = IntCodeComputer.ProcessWithUserInput(input, new int[] { 5 });
 
             // Arrange
             result.Output.ShouldBe(new List<int> { 9386583 });
