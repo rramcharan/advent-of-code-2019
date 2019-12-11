@@ -43,6 +43,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Part1\AmplifierController.cs" />
+    <Compile Include="Part1\AmplifierWithFeedbackLookController.cs" />
+    <Compile Include="Part1\Instruction.cs" />
+    <Compile Include="Part1\IntCodeComputer.cs" />
+    <Compile Include="Part1\Opcode.cs" />
+    <Compile Include="Part1\ParameterMode.cs" />
     <Compile Include="Day7\AmplifierController.cs" />
     <Compile Include="Day7\AmplifierWithFeedbackLookController.cs" />
     <Compile Include="Day7\Instruction.cs" />
