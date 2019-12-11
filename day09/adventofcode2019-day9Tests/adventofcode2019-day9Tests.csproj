@@ -71,6 +71,7 @@
     <Compile Include="Day7\GravityAssistDay7Part1Tests.cs" />
     <Compile Include="Day7\GravityAssistDay7Part2Tests.cs" />
     <Compile Include="Day7\InputTests.cs" />
+    <Compile Include="Part2\GravityAssistDay9Part2Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
