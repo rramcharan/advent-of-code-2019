@@ -13,7 +13,7 @@ namespace adventofcode2019_day10.Day10Part1.Tests
     public class Puzzle
     {
         [TestMethod()]
-        public void Puzzle()
+        public void RunPuzzle()
         {
             // Arrage
             var monitor = CeresMonitoringSystem.LoadAsteroidsMap(@"
