@@ -43,6 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Day10Part2\Angle.cs" />
+    <Compile Include="Day10Part2\AsteroidMap.cs" />
+    <Compile Include="Day10Part2\CeresMonitoringSystem.cs" />
+    <Compile Include="Day10Part2\Coords.cs" />
     <Compile Include="Day10Part1\Angle.cs" />
     <Compile Include="Day10Part1\AsteroidMap.cs" />
     <Compile Include="Day10Part1\CeresMonitoringSystem.cs" />
