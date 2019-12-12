@@ -19,7 +19,7 @@ namespace adventofcode2019_day10.Day10Part2
             var y = 0;
             using (StringReader reader = new StringReader(textMap))
             {
-                var map = new Dictionary<int, Dictionary<int,bool>>();
+                var map = new Dictionary<int, Dictionary<int,IAsteroid>>();
                 string line;
                 while ((line = reader.ReadLine()) != null)
                 {
@@ -28,15 +28,20 @@ namespace adventofcode2019_day10.Day10Part2
                     if (string.IsNullOrEmpty(line)) continue;
                     foreach(var pos in line)
                     {
-                        if (!map.ContainsKey(x)) map[x] = new Dictionary<int, bool>();
-                        map[x][y] = pos == '#';
+                        if (!map.ContainsKey(x)) map[x] = new Dictionary<int, IAsteroid>();
+
+                        
+                        var something = pos == '#'
+                            ? new Asteroid(x, y) 
+                            : NoAsteroid.Create(x, y);
                         x++;
+                        system.Map.AddAsteroid(something);
                     }
                     y++;
                 }
-                system.Map.Load(map);
             }
 
+            system.Map.BuildAsteroidsMeasurementMap();
             return system;
         }
 
@@ -45,25 +50,22 @@ namespace adventofcode2019_day10.Day10Part2
             Asteroid asteroids = null;
             var highestCount = 0;
             var identicalNbrOfCounts = 0;
+
+            foreach (var asteroid in Map.Asteroids)
             {
-                for (var x = 0; x < Map.DimensionX; x++)
+                var count = asteroid.VisibleAsteroids();
+                if (count > highestCount)
                 {
-                    for (var y = 0; y < Map.DimensionY; y++)
-                    {
-                        var count = Map.VisibleAsteriodsCount(x, y);
-                        if (count > highestCount)
-                        {
-                            highestCount = count;
-                            asteroids = new Asteroid(x, y) { NbrOfVisibleAsteroids=count};
-                            identicalNbrOfCounts = 1;
-                        }
-                        else if (count == highestCount)
-                        {
-                            identicalNbrOfCounts++;
-                        }
-                    }
+                    highestCount = count;
+                    identicalNbrOfCounts = 1;
+                    asteroids = asteroid;
+                }
+                else if (count == highestCount)
+                {
+                    identicalNbrOfCounts++;
                 }
             }
+
             if (asteroids==null)  throw new Exception("Can't find asteroid with the most visible asteroids.");
             if (identicalNbrOfCounts != 1) throw new Exception($"Too many asteroids found with {highestCount} visible asteroids.");
 

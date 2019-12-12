@@ -4,49 +4,88 @@ namespace adventofcode2019_day10.Day10Part2
 {
     public class AsteroidMap
     {
-        public int DimensionX { get; private set; }
-        public int DimensionY { get; private set; }
-        public Dictionary<int, Dictionary<int, bool>> Map { get; private set; }
-        public bool IsAndroid(int x, int y) => Map[x][y];
-
-        internal void Load(Dictionary<int, Dictionary<int, bool>> map)
+        public AsteroidMap()
         {
-            Map = map;
-            DimensionX = map[0].Count;
-            DimensionY = map.Count;
+            Map = new Dictionary<int, Dictionary<int, IAsteroid>>();
+            Asteroids = new List<Asteroid>();
+        }
+
+        public int DimensionX => Map[0].Count;
+        public int DimensionY => Map.Count;
+        public Dictionary<int, Dictionary<int, IAsteroid>> Map { get; private set; }
+        public List<Asteroid> Asteroids { get; private set; }
+        public bool IsAndroid(int x, int y) => Map[x][y].IsAsteroid;
+
+        public void AddAsteroid(IAsteroid asteroid)
+        {
+            if (!Map.ContainsKey(asteroid.X)) Map[asteroid.X] = new Dictionary<int, IAsteroid>();
+            Map[asteroid.X][asteroid.Y] = asteroid;
+
+            if (asteroid is Asteroid)
+                Asteroids.Add(asteroid as Asteroid);
         }
 
         public int VisibleAsteriodsCount(int x, int y)
         {
-            var count = VisibleCountMap(x, y);
-            return count;
+            if (!Map.ContainsKey(x)) return 0;
+            if (!Map[x].ContainsKey(y)) return 0;
+
+            var asteroid = Map[x][y];
+            return asteroid.VisibleAsteroids();
         }
 
-        private int VisibleCountMap(int x, int y)
-        {
-            if (!IsAndroid(x, y)) return 0;
+        //private int VisibleCountMap(int x, int y)
+        //{
+        //    var something = Map[x][y];
+        //    if (something is Asteroid asteroid)
+        //        return VisibleCountMap(asteroid);
+        //    return 0;
+        //}
+        //private int VisibleCountMap(Asteroid refAsteroid)
+        //{
+        //    foreach (var asteroid in Asteroids)
+        //    {
+        //        if (refAsteroid == asteroid) continue;
+        //        var visibleAnge = Angle.Calculate(x, y, x1, y1);
+        //        refAsteroid.OtherAsteroids.Add(asteroid, new AsteroidMeasurement { Angle = visibleAnge });
+        //    }
 
-            var counter = 0;
-            var angles = new List<double>();
-            //var counterMap = new Dictionary<int, Dictionary<int, double>>();
-            for (var y1 = 0; y1 < DimensionY; y1++)
-            {
-                for (var x1 = 0; x1 < DimensionX; x1++)
-                {
-                    if (x == x1 && y == y1) continue;
-                    if (!IsAndroid(x1,y1)) continue;
+        //    var x = refAsteroid.X;
+        //    var y = refAsteroid.Y;
+        //    for (var y1 = 0; y1 < DimensionY; y1++)
+        //    {
+        //        for (var x1 = 0; x1 < DimensionX; x1++)
+        //        {
+        //            var asteroid = Map[x1][y1] as Asteroid;
+        //            if (asteroid == null) continue;
                     
-                    var visibleAnge = Angle.Calculate(x,y, x1, y1);
-                    //System.Console.WriteLine($"asteroid({x1},{y1}) - angle: {visibleAnge}");
-                    if (angles.Contains(visibleAnge)) continue;
+        //            var visibleAnge = Angle.Calculate(x,y, x1, y1);
+        //            refAsteroid.OtherAsteroids.Add(asteroid, new AsteroidMeasurement { Angle = visibleAnge });
 
-                    counter++;
-                    angles.Add(visibleAnge);
-                }
+        //        }
+        //    }
+
+        //    return 0;
+        //}
+        public void BuildAsteroidsMeasurementMap()
+        {
+            foreach (var asteroid in Asteroids)
+            {
+                BuildAsteroidsMeasurementMap(asteroid);
             }
+        }
 
-            //System.Console.WriteLine($"VisibleCountMap({x},{y}): {counter}");
-            return counter;
-        }           
+        private void BuildAsteroidsMeasurementMap(Asteroid refAsteroid)
+        {
+            foreach (var asteroid in Asteroids)
+            {
+                if (refAsteroid == asteroid) continue;
+
+                var visibleAnge = CalculateAngle(refAsteroid, asteroid);
+                refAsteroid.OtherAsteroids.Add(asteroid, new AsteroidMeasurement { Angle = visibleAnge });
+            }
+        }
+        private double CalculateAngle(Asteroid refAsteroid, Asteroid asteroid) 
+            => Angle.Calculate(refAsteroid.X, refAsteroid.Y, asteroid.X, asteroid.Y);
     }
 }
