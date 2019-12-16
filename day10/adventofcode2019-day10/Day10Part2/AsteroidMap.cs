@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace adventofcode2019_day10.Day10Part2
 {
@@ -10,8 +12,8 @@ namespace adventofcode2019_day10.Day10Part2
             Asteroids = new List<Asteroid>();
         }
 
-        public int DimensionX => Map[0].Count;
-        public int DimensionY => Map.Count;
+        public int DimensionY => Map[0].Count;
+        public int DimensionX => Map.Count;
         public Dictionary<int, Dictionary<int, IAsteroid>> Map { get; private set; }
         public List<Asteroid> Asteroids { get; private set; }
         public bool IsAndroid(int x, int y) => Map[x][y].IsAsteroid;
@@ -31,42 +33,15 @@ namespace adventofcode2019_day10.Day10Part2
             if (!Map[x].ContainsKey(y)) return 0;
 
             var asteroid = Map[x][y];
-            return asteroid.VisibleAsteroids();
+            BuildAsteroidsMeasurementMap(asteroid as Asteroid);
+            return asteroid.NbrOfVisibleAsteroids;
+        }
+        public int VisibleAsteriodsCount(Asteroid refAsteroid)
+        {
+            BuildAsteroidsMeasurementMap(refAsteroid);
+            return refAsteroid.NbrOfVisibleAsteroids;
         }
 
-        //private int VisibleCountMap(int x, int y)
-        //{
-        //    var something = Map[x][y];
-        //    if (something is Asteroid asteroid)
-        //        return VisibleCountMap(asteroid);
-        //    return 0;
-        //}
-        //private int VisibleCountMap(Asteroid refAsteroid)
-        //{
-        //    foreach (var asteroid in Asteroids)
-        //    {
-        //        if (refAsteroid == asteroid) continue;
-        //        var visibleAnge = Angle.Calculate(x, y, x1, y1);
-        //        refAsteroid.OtherAsteroids.Add(asteroid, new AsteroidMeasurement { Angle = visibleAnge });
-        //    }
-
-        //    var x = refAsteroid.X;
-        //    var y = refAsteroid.Y;
-        //    for (var y1 = 0; y1 < DimensionY; y1++)
-        //    {
-        //        for (var x1 = 0; x1 < DimensionX; x1++)
-        //        {
-        //            var asteroid = Map[x1][y1] as Asteroid;
-        //            if (asteroid == null) continue;
-                    
-        //            var visibleAnge = Angle.Calculate(x,y, x1, y1);
-        //            refAsteroid.OtherAsteroids.Add(asteroid, new AsteroidMeasurement { Angle = visibleAnge });
-
-        //        }
-        //    }
-
-        //    return 0;
-        //}
         public void BuildAsteroidsMeasurementMap()
         {
             foreach (var asteroid in Asteroids)
@@ -77,15 +52,43 @@ namespace adventofcode2019_day10.Day10Part2
 
         private void BuildAsteroidsMeasurementMap(Asteroid refAsteroid)
         {
+            if (refAsteroid == null) return;
+
+            var nbrX = Map.Count;
+            refAsteroid.OtherAsteroids.Clear();
             foreach (var asteroid in Asteroids)
             {
                 if (refAsteroid == asteroid) continue;
 
-                var visibleAnge = CalculateAngle(refAsteroid, asteroid);
-                refAsteroid.OtherAsteroids.Add(asteroid, new AsteroidMeasurement { Angle = visibleAnge });
+                var visibleAnge = CalculateAngle(nbrX, asteroid, refAsteroid);
+                refAsteroid.OtherAsteroids.Add(asteroid, new AsteroidMeasurement
+                {
+                    Asteroid = asteroid,
+                    Angle = visibleAnge,
+                    Distance = CalculateDistance(asteroid, refAsteroid)
+                });
+            }
+            // Correct angles for asteroid with the same angle
+            var _items = from a in refAsteroid.OtherAsteroids.Values
+                         orderby a.Angle
+                         group a by a.Angle;
+
+            foreach (var _itemGroup in _items)
+            {
+                var subGroep = _itemGroup.OrderBy(a => a.Distance).ToList();
+                if (subGroep.Count > 1)
+                {
+                    for (var idx = 1; idx < subGroep.Count; idx++)
+                    {
+                        subGroep[idx].Angle += idx * 360M;
+                    }
+                }
             }
         }
-        private double CalculateAngle(Asteroid refAsteroid, Asteroid asteroid) 
-            => Angle.Calculate(refAsteroid.X, refAsteroid.Y, asteroid.X, asteroid.Y);
+        private decimal CalculateAngle(int nbrX, Asteroid refAsteroid, Asteroid asteroid) 
+            => Angle.CalculateInDegreesClockWiseTopIs0(nbrX-refAsteroid.X, refAsteroid.Y, nbrX-asteroid.X, asteroid.Y);
+        private decimal CalculateDistance(Asteroid refAsteroid, Asteroid asteroid) 
+            => Convert.ToDecimal(Math.Sqrt(Math.Pow((asteroid.X - refAsteroid.X), 2) + Math.Pow((asteroid.Y - refAsteroid.Y), 2)));
+
     }
 }

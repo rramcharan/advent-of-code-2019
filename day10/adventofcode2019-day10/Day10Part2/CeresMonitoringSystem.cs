@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace adventofcode2019_day10.Day10Part2
 {
     public class CeresMonitoringSystem
     {
+        private List<AsteroidMeasurement> _asteroidsToVaporize;
+
         private CeresMonitoringSystem()
         {
             Map = new AsteroidMap();
@@ -30,10 +33,10 @@ namespace adventofcode2019_day10.Day10Part2
                     {
                         if (!map.ContainsKey(x)) map[x] = new Dictionary<int, IAsteroid>();
 
-                        
-                        var something = pos == '#'
-                            ? new Asteroid(x, y) 
-                            : NoAsteroid.Create(x, y);
+
+                        var something = pos == '.'
+                            ? NoAsteroid.Create(x, y)
+                            : new Asteroid(x, y);
                         x++;
                         system.Map.AddAsteroid(something);
                     }
@@ -53,7 +56,8 @@ namespace adventofcode2019_day10.Day10Part2
 
             foreach (var asteroid in Map.Asteroids)
             {
-                var count = asteroid.VisibleAsteroids();
+                Map.VisibleAsteriodsCount(asteroid);
+                var count = asteroid.NbrOfVisibleAsteroids;
                 if (count > highestCount)
                 {
                     highestCount = count;
@@ -72,7 +76,6 @@ namespace adventofcode2019_day10.Day10Part2
             return asteroids;
         }
 
-
         /// <summary>
         /// Upper left corner=(0,0)
         /// </summary>
@@ -90,12 +93,160 @@ namespace adventofcode2019_day10.Day10Part2
                     sb.AppendLine();
                     for (var x = 0; x < Map.DimensionX; x++)
                     {
+                        var asteroid = Map.Map[x][y];
                         var count = Map.VisibleAsteriodsCount(x, y);
-                        sb.Append(count == 0 ? "." : count.ToString());
+                        sb.Append(count == 0 || !asteroid.IsAsteroid ? "." : count.ToString() );
                     }
                 }
             }
             return sb.ToString();
         }
+
+        public string DisplayAsteriodsMap()
+        {
+            var sb = new StringBuilder();
+            {
+                for (var y = 0; y < Map.DimensionY; y++)
+                {
+                    sb.AppendLine();
+                    for (var x = 0; x < Map.DimensionX; x++)
+                    {
+                        var asteroid = Map.Map[x][y];
+                        sb.Append(asteroid.IsAsteroid ? "#" : ".");
+                    }
+                }
+            }
+            return sb.ToString();
+        }
+
+        #region Vaporize
+
+        //public CeresMonitoringSystem Vaporize(int x, int y, int numberToVaporize)
+        //{
+        //    var asteroidsToVaporize = MarkVaporize(x, y, numberToVaporize);
+        //    foreach(var asteroid in asteroidsToVaporize)
+        //    {
+        //        asteroid.Asteroid.Destroyed = true;
+        //    }
+        //    return ReBuildMap();
+        //}
+
+        public void VaporizeBuildList(int x, int y)
+        {
+            _asteroidsToVaporize = MarkVaporize(x, y);
+        }
+
+        public void Vaporize(int numberToVaporize)
+        {
+            var asteroidsToVaporize = _asteroidsToVaporize.Take(numberToVaporize);
+            foreach (var asteroid in asteroidsToVaporize)
+            {
+                asteroid.Asteroid.Destroyed = true;
+            }
+            _asteroidsToVaporize = _asteroidsToVaporize.Skip(numberToVaporize).ToList();
+        }
+
+
+        public void Vaporize(int x, int y, int numberToVaporize)
+        {
+            var asteroidsToVaporize = MarkVaporize(x, y, numberToVaporize);
+            foreach (var asteroid in asteroidsToVaporize)
+            {
+                asteroid.Asteroid.Destroyed = true;
+            }
+        }
+
+        private CeresMonitoringSystem ReBuildMap()
+        {
+            var textMap = DisplayAsteriodsMap();
+            return LoadAsteroidsMap(textMap);
+            //var map = new AsteroidMap();
+            //for (var x = 0; x < Map.DimensionX; x++)
+            //{
+            //    for (var y = 0; y < Map.DimensionX; y++)
+            //    {
+            //        var asteroid = Map.Map[x][y];
+            //        if (asteroid is NoAsteroid)
+            //        {
+            //            map.Map[x][y] = asteroid;
+            //        }
+            //        else
+            //        {
+            //            var realAsteroid = (Asteroid)asteroid;
+            //            map.Map[x][y] = realAsteroid.Destroyed ? NoAsteroid.Create(x,y) : realAsteroid;
+            //        }
+            //    }
+            //}
+            //Map = map;
+            //Map.BuildAsteroidsMeasurementMap();
+        }
+
+        public List<AsteroidMeasurement> MarkVaporize(int x, int y)
+        {
+            var asteroid = Map.Map[x][y] as Asteroid;
+            if (asteroid == null) return null;
+
+            var result = new List<AsteroidMeasurement>();
+
+            var _items = from a in asteroid.OtherAsteroids.Values
+                         orderby a.Angle
+                         group a by a.Angle;
+
+            foreach (var _itemGroup in _items)
+            {
+                var subGroep = _itemGroup.OrderBy(a => a.Distance);
+                result.Add(subGroep.First());
+            }
+
+            var sorted = result.OrderBy(a => a.Angle).ToList();
+            return sorted;
+        }
+
+
+        public List<AsteroidMeasurement> MarkVaporize(int x, int y, int numberToVaporize)
+        {
+            var asteroid = Map.Map[x][y] as Asteroid;
+            if (asteroid == null) return null;
+
+            var result = new List<AsteroidMeasurement>();
+
+            var _items = from a in asteroid.OtherAsteroids.Values
+                         orderby a.Angle
+                         group a by a.Angle;
+
+            foreach (var _itemGroup in _items)
+            {
+                var subGroep = _itemGroup.OrderBy(a => a.Distance);
+                result.Add(subGroep.First());
+            }
+
+            var sorted = result.OrderBy(a => a.Angle).Take(numberToVaporize).ToList();
+            MarkMapToVaporize(sorted);
+            return sorted;
+        }
+
+        private void MarkMapToVaporize(List<AsteroidMeasurement> astoroids)
+        {
+            for (var idx=0; idx<astoroids.Count; idx++)
+            {
+                var astoroid = astoroids[idx];
+                astoroid.ShowAs($"{idx+1}");
+            }
+        }
+
+        public void MarkToVaporize(int numberToVaporize)
+        {
+            var asteroidsToVaporize = _asteroidsToVaporize.Take(numberToVaporize).ToList();
+            MarkMapToVaporize(asteroidsToVaporize);
+        }
+
+        //public object ShowAsteriodsMap()
+        //{
+        //    for(var y=0;)
+        //}
+
+
+
+        #endregion
     }
 }

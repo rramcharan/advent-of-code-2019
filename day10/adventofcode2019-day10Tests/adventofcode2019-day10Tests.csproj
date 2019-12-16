@@ -66,6 +66,8 @@
     <Compile Include="Day10Part1\CalculateAngleTests.cs" />
     <Compile Include="Day10Part1\Puzzle.cs" />
     <Compile Include="Day10Part1\CeresMonitoringSystemTests.cs" />
+    <Compile Include="Day10Part2\Part2\AngleTests.cs" />
+    <Compile Include="Day10Part2\Part2\VaporizerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

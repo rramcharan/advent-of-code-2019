@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace adventofcode2019_day10.Day10Part2
@@ -11,28 +12,13 @@ namespace adventofcode2019_day10.Day10Part2
             Y = y;
             OtherAsteroids = new Dictionary<Asteroid, AsteroidMeasurement>();
         }
-        public bool IsAsteroid => false;
+        public bool IsAsteroid => !Destroyed;
+        public bool Destroyed { get; set; }
 
-        public int NbrOfVisibleAsteroids => VisibleAsteroids();
+        public int NbrOfVisibleAsteroids => VisibleAsteroids().Count;
         public Dictionary<Asteroid, AsteroidMeasurement> OtherAsteroids { get; private set; }
 
-        public int VisibleAsteroids()
-        {
-            int count = 0;
-            var angles = new List<double>();
-            foreach (var asteroid in OtherAsteroids.Keys)
-            {
-                if (this == asteroid) throw new Exception("Some is wrong. Current asteroid is available in the list of other asteroids.");
-
-                var measurements = OtherAsteroids[asteroid];
-                var visibleAnge = measurements.Angle;
-                if (angles.Contains(visibleAnge)) continue;
-
-                count++;
-                angles.Add(visibleAnge);
-            }
-            return count;
-        }
+        public List<Asteroid> VisibleAsteroids() => OtherAsteroids.Values.Where(a => a.Asteroid.IsAsteroid && a.Angle < 360M).Select(am => am.Asteroid).ToList();
     }
     public class NoAsteroid: BaseAsteroid, IAsteroid
     {
@@ -43,18 +29,30 @@ namespace adventofcode2019_day10.Day10Part2
             return new NoAsteroid { X = x, Y = y };
         }
 
-        public int VisibleAsteroids() => 0;
+        public int NbrOfVisibleAsteroids => 0;
     }
     public abstract class BaseAsteroid
     {
+        public BaseAsteroid()
+        {
+            Label = "#";
+        }
+
         public int X { get; protected set; }
         public int Y { get; protected set; }
+        public string Label { get; set; }
     }
 
     public class AsteroidMeasurement
     {
-        public double Angle { get; set; }
-        public int Distance { get; set; }
+        public Asteroid Asteroid { get; set; }
+        public decimal Angle { get; set; }
+        public decimal Distance { get; set; }
+
+        internal void ShowAs(string label)
+        {
+            Asteroid.Label = label;
+        }
     }
 
 }
