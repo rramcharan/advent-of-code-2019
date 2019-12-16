@@ -131,9 +131,10 @@ namespace adventofcode2019_day10.Day10Part2
         //    return ReBuildMap();
         //}
 
-        public void VaporizeBuildList(int x, int y)
+        public List<AsteroidMeasurement> VaporizeBuildList(int x, int y)
         {
             _asteroidsToVaporize = MarkVaporize(x, y);
+            return _asteroidsToVaporize;
         }
 
         public void Vaporize(int numberToVaporize)
