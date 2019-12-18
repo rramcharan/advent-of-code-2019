@@ -6,32 +6,32 @@ namespace adventofcode2019_day11.Day11Part1
 {
     public class AmplifierWithFeedbackLookController
     {
-        public int MaxThrusterSignal { get; private set; }
-        public List<int> Output { get; private set; }
+        public long MaxThrusterSignal { get; private set; }
+        public List<long> Output { get; private set; }
 
-        public static AmplifierWithFeedbackLookController RunSequenceOnAmplifiers(int[] input, int seq1, int seq2, int seq3, int seq4, int seq5)
+        public static AmplifierWithFeedbackLookController RunSequenceOnAmplifiers(long[] input, long seq1, long seq2, long seq3, long seq4, long seq5)
         {
             var result = new AmplifierWithFeedbackLookController();
             result.Run(input, seq1, seq2, seq3, seq4, seq5);
             return result;
         }
 
-        public List<int[]> AllCombination(params int[] seq)
+        public List<long[]> AllCombination(params long[] seq)
         {
             var test = new FormPermut();
             test.PrnPermut(seq, 0, seq.Length - 1);
             return test.Permutations;
         }
 
-        private void Run(int[] code, int seq1, int seq2, int seq3, int seq4, int seq5)
+        private void Run(long[] code, long seq1, long seq2, long seq3, long seq4, long seq5)
         {
-            int? maxThrusterSignal = null;
-            int? lastOutput = null;
+            long? maxThrusterSignal = null;
+            long? lastOutput = null;
             var seqCombinations = new AmplifierWithFeedbackLookController().AllCombination(seq1, seq2, seq3, seq4, seq5);
 
             foreach (var seq in seqCombinations)
             {
-                var amp1 = IntCodeComputer.Create("Amp1", Clone(code), SetInput(seq[0], new List<int> { 0 })); ;
+                var amp1 = IntCodeComputer.Create("Amp1", Clone(code), SetInput(seq[0], new List<long> { 0 })); ;
                 var amp2 = IntCodeComputer.Create("Amp2", Clone(code), SetInput(seq[1]));
                 var amp3 = IntCodeComputer.Create("Amp3", Clone(code), SetInput(seq[2]));
                 var amp4 = IntCodeComputer.Create("Amp4", Clone(code), SetInput(seq[3]));
@@ -90,23 +90,23 @@ namespace adventofcode2019_day11.Day11Part1
         }
 
 
-        private int[] SetInput(int seq)
+        private long[] SetInput(long seq)
         {
-            return new int[1] { seq };
+            return new long[1] { seq };
         }
 
-        private int[] SetInput(int seq, List<int> output)
+        private long[] SetInput(long seq, List<long> output)
         {
-            var input = new List<int> { seq };
+            var input = new List<long> { seq };
             if (output != null)
                 input.AddRange(output);
 
             return input.ToArray();
         }
 
-        private int[] Clone(int[] input)
+        private long[] Clone(long[] input)
         {
-            return (int[])input.Clone();
+            return (long[])input.Clone();
         }
     }
 }

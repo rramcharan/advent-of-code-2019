@@ -4,5 +4,6 @@
     {
         Position,
         Immediate,
+        Relative
     }
 }

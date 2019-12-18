@@ -7,46 +7,48 @@ namespace adventofcode2019_day11.Day11Part1
     public class IntCodeComputer
     {
         public string Name { get; private set; }
-        private Dictionary<int, int> _intCodes;
-        private Queue<int> _userInput;
-        private int _instructionPointer;
-        public List<int> Output = new List<int>();
+        private Dictionary<long, long> _intCodes;
+        private Queue<long> _userInput;
+        private long _instructionPointer;
+        public List<long> Output = new List<long>();
         public StringBuilder OutputConsole = new StringBuilder();
+        public long RelativeBase { get; private set; }
 
         #region Ctor...
 
-        private IntCodeComputer(int[] intCodes) : this(intCodes, null)
+        private IntCodeComputer(long[] intCodes) : this(intCodes, null)
         {
         }
 
-        private IntCodeComputer(int[] intCodes, int[] userInput)
+        private IntCodeComputer(long[] intCodes, long[] userInput)
         {
             Name = "?";
             InitIntCodes(intCodes);
             InitInput(userInput);
             _instructionPointer = 0;
+            RelativeBase = 0;
         }
         #endregion
 
         #region Init...
 
-        private void InitIntCodes(int[] intCodes)
+        private void InitIntCodes(long[] intCodes)
         {
-            _intCodes = new Dictionary<int, int>();
+            _intCodes = new Dictionary<long, long>();
             if (intCodes != null)
             {
-                for (int index = 0; index < intCodes.Length; index++)
+                for (long index = 0; index < intCodes.Length; index++)
                     _intCodes[index] = intCodes[index];
             }
         }
 
-        private void InitInput(int[] userInput)
+        private void InitInput(long[] userInput)
         {
-            _userInput = new Queue<int>();
+            _userInput = new Queue<long>();
             SetInput(userInput);
         }
 
-        private void SetInput(int[] userInput)
+        private void SetInput(long[] userInput)
         {
             if (_userInput.Count > 0)
                 throw new Exception("Computer has input arguments queued. Can't re-initialise!");
@@ -58,7 +60,7 @@ namespace adventofcode2019_day11.Day11Part1
                 AddInput(input);
         }
 
-        public void AddInput(int input)
+        public void AddInput(long input)
         {
             _userInput.Enqueue(input);
         }
@@ -67,44 +69,44 @@ namespace adventofcode2019_day11.Day11Part1
         public bool IsHalted { get; private set; }
         public bool IsWaitingForInput { get; private set; }
 
-        public Dictionary<int, int> Codes => _intCodes;
+        public Dictionary<long, long> Codes => _intCodes;
 
-        public int Code(int address) => _intCodes[address];
-        public int Noun
+        public long Code(long address) => _intCodes[address];
+        public long Noun
         {
             get => _intCodes[1];
             set { _intCodes[1] = value; }
         }
-        public int Verb
+        public long Verb
         {
             get => _intCodes[2];
             set { _intCodes[2] = value; }
         }
 
-        public static IntCodeComputer Create(string name, int[] intCodes, int[] userInput)
+        public static IntCodeComputer Create(string name, long[] intCodes, long[] userInput)
         {
             var computer = new IntCodeComputer(intCodes, userInput);
             computer.Name = name;
 
             return computer;
         }
-        public static IntCodeComputer Create(params int[] intCodes)
+        public static IntCodeComputer Create(params long[] intCodes)
         {
             return new IntCodeComputer(intCodes);
 
         }
-        public static IntCodeComputer Process(params int[] intCodes)
+        public static IntCodeComputer Process(params long[] intCodes)
         {
             return ProcessWithUserInput(intCodes, null);
         }
-        public static IntCodeComputer ProcessWithUserInput(int[] intCodes, int[] userInput)
+        public static IntCodeComputer ProcessWithUserInput(long[] intCodes, long[] userInput)
         {
             var result = new IntCodeComputer(intCodes, userInput);
             result.ProcessInstructions();
             return result;
         }
 
-        public static IntCodeComputer RestoreGravityAsistAndProcessCodes(int noun, int verb, params int[] initialState)
+        public static IntCodeComputer RestoreGravityAsistAndProcessCodes(long noun, long verb, params long[] initialState)
         {
             var result = new IntCodeComputer(initialState, null);
             result.RestoreGravityAsist(noun, verb);
@@ -112,7 +114,7 @@ namespace adventofcode2019_day11.Day11Part1
             return result;
         }
 
-        public void ProcessWithUserInput(int[] userInput)
+        public void ProcessWithUserInput(long[] userInput)
         {
             InitInput(userInput);
             ProcessInstructions();
@@ -127,7 +129,7 @@ namespace adventofcode2019_day11.Day11Part1
 
 
         #region private methods
-        private void RestoreGravityAsist(int noun, int verb)
+        private void RestoreGravityAsist(long noun, long verb)
         {
             Noun = noun;
             Verb = verb;
@@ -190,6 +192,9 @@ namespace adventofcode2019_day11.Day11Part1
                 case Opcode.SetResetIfEquals:
                     SetResetIfEquals(instructionPointer, instruction);
                     return true;
+                case Opcode.SetRelativeBase:
+                    SetRelativeBase(instructionPointer, instruction);
+                    return true;
                 case Opcode.Halt:
                     IsHalted = true;
                     return false;
@@ -198,17 +203,25 @@ namespace adventofcode2019_day11.Day11Part1
             return false;
         }
 
+        private void SetRelativeBase(long instructionPointer, Instruction instruction)
+        {
+            var value1 = GetValue(instructionPointer + 1, instruction.ModeParam1);
+            RelativeBase += value1;
+
+            InstructionPointerIncrement(2);
+        }
+
         public bool NextUserInputAvailable()
         {
             return _userInput.Count > 0;
         }
-        public int NextUserInput()
+        public long NextUserInput()
         {
             var input = _userInput.Dequeue();
             return input;
         }
 
-        private void JumpIfTrue(int instructionPointer, Instruction instruction)
+        private void JumpIfTrue(long instructionPointer, Instruction instruction)
         {
             var value1 = GetValue(instructionPointer + 1, instruction.ModeParam1);
             var value2 = GetValue(instructionPointer + 2, instruction.ModeParam2);
@@ -223,7 +236,7 @@ namespace adventofcode2019_day11.Day11Part1
             }
         }
 
-        private void JumpIfFalse(int instructionPointer, Instruction instruction)
+        private void JumpIfFalse(long instructionPointer, Instruction instruction)
         {
             var value1 = GetValue(instructionPointer + 1, instruction.ModeParam1);
             var value2 = GetValue(instructionPointer + 2, instruction.ModeParam2);
@@ -238,7 +251,7 @@ namespace adventofcode2019_day11.Day11Part1
             }
         }
 
-        private void SetResetIfLessThan(int instructionPointer, Instruction instruction)
+        private void SetResetIfLessThan(long instructionPointer, Instruction instruction)
         {
             var value1 = GetValue(instructionPointer + 1, instruction.ModeParam1);
             var value2 = GetValue(instructionPointer + 2, instruction.ModeParam2);
@@ -254,7 +267,7 @@ namespace adventofcode2019_day11.Day11Part1
             InstructionPointerIncrement(4);
         }
 
-        private void SetResetIfEquals(int instructionPointer, Instruction instruction)
+        private void SetResetIfEquals(long instructionPointer, Instruction instruction)
         {
             var value1 = GetValue(instructionPointer + 1, instruction.ModeParam1);
             var value2 = GetValue(instructionPointer + 2, instruction.ModeParam2);
@@ -270,33 +283,54 @@ namespace adventofcode2019_day11.Day11Part1
             InstructionPointerIncrement(4);
         }
 
-        private void InstructionPointerIncrement(int value)
+        private void InstructionPointerIncrement(long value)
         {
             SetInstructionPointer(_instructionPointer + value);
         }
 
-        private void SetInstructionPointer(int value)
+        private void SetInstructionPointer(long value)
         {
             _instructionPointer = value;
         }
 
-        private int GetValue(int from, ParameterMode mode)
+        private long GetValue(long from, ParameterMode mode)
         {
             var address = _intCodes[from];
-            var value = mode == ParameterMode.Immediate ? address : _intCodes[address];
-            return value;
+            switch (mode)
+            {
+                case ParameterMode.Immediate:
+                    return address;
+                case ParameterMode.Position:
+                    if (_intCodes.ContainsKey(address))
+                        return _intCodes[address];
+                    return 0;
+                case ParameterMode.Relative:
+                    var newAddress = RelativeBase + address;
+                    return _intCodes[newAddress];
+                default:
+                    throw new Exception($"Not implemented mode: '{mode}'");
+            }
         }
 
-        private void SetValue(int value, int at, ParameterMode mode)
+        private void SetValue(long value, long at, ParameterMode mode)
         {
-            if (mode == ParameterMode.Immediate)
-                throw new Exception("Parameter should be a Position mode parameter");
+            long address;
+            switch (mode)
+            {
+                case ParameterMode.Position:
+                    address = _intCodes[at];
+                    break;
+                case ParameterMode.Relative:
+                    address = _intCodes[at] + RelativeBase;
+                    break;
+                default:
+                    throw new Exception($"Parameter mode '{mode}' is not supported.");
+            }
 
-            var address = _intCodes[at];
             _intCodes[address] = value;
         }
 
-        private void SendToOutput(int number)
+        private void SendToOutput(long number)
         {
             Output.Add(number);
             //SendToOutput(number.ToString(CultureInfo.InvariantCulture));

@@ -64,7 +64,11 @@
     <Compile Include="Day11Part1\GravityAssistDay5Part2Tests.cs" />
     <Compile Include="Day11Part1\GravityAssistDay7Part1Tests.cs" />
     <Compile Include="Day11Part1\GravityAssistDay7Part2Tests.cs" />
+    <Compile Include="Day11Part1\GravityAssistDay9Part1Tests.cs" />
     <Compile Include="Day11Part1\InputTests.cs" />
+    <Compile Include="Day11Part1\PaintingRobot\PuzzleDay11Part1.cs" />
+    <Compile Include="Day11Part1\PaintingRobot\SingleMovesTests.cs" />
+    <Compile Include="Day11Part1\PaintingRobot\EmergencyHullPaintingRobotTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

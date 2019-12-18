@@ -17,9 +17,9 @@ namespace adventofcode2019_day11Tests.Day11Part1
             var result = new AmplifierController().AllCombination(1, 2);
 
             // Arrange
-            result.ShouldBe(new List<int[]> {
-                new int[] { 1, 2 },
-                new int[] { 2, 1 },
+            result.ShouldBe(new List<long[]> {
+                new long[] { 1, 2 },
+                new long[] { 2, 1 },
             });
         }
 
@@ -30,13 +30,13 @@ namespace adventofcode2019_day11Tests.Day11Part1
             var result = new AmplifierController().AllCombination(1, 20, 30);
 
             // Arrange
-            result.ShouldBe(new List<int[]> {
-                new int[] { 1, 20, 30 },
-                new int[] { 1, 30, 20},
-                new int[] {20,  1, 30 },
-                new int[] {20, 30,  1 },
-                new int[] {30, 20,  1 },
-                new int[] {30,  1, 20 },
+            result.ShouldBe(new List<long[]> {
+                new long[] { 1, 20, 30 },
+                new long[] { 1, 30, 20},
+                new long[] {20,  1, 30 },
+                new long[] {20, 30,  1 },
+                new long[] {30, 20,  1 },
+                new long[] {30,  1, 20 },
             });
         }
 

@@ -13,7 +13,7 @@ namespace adventofcode2019_day11Tests.Day11Part1
         public void Input_NoInput_Test01()
         {
             // Arrange
-            var intCodes = new int[]
+            var intCodes = new long[]
             {
                 3,50,
                 99
@@ -30,7 +30,7 @@ namespace adventofcode2019_day11Tests.Day11Part1
         public void Input_OneInput_Test01()
         {
             // Arrange
-            var intCodes = new int[]
+            var intCodes = new long[]
             {
                 3,50,
                 99
@@ -48,7 +48,7 @@ namespace adventofcode2019_day11Tests.Day11Part1
         public void Input_OneInput_Test02()
         {
             // Arrange
-            var intCodes = new int[]
+            var intCodes = new long[]
             {
                 3,50,
                 99
@@ -68,7 +68,7 @@ namespace adventofcode2019_day11Tests.Day11Part1
         public void Input_MulitpleInput_Test01()
         {
             // Arrange
-            var intCodes = new int[]
+            var intCodes = new long[]
             {
                 3,50,
                 99
@@ -92,12 +92,12 @@ namespace adventofcode2019_day11Tests.Day11Part1
         public void Input_MulitpleInput_Test02()
         {
             // Arrange
-            var intCodes = new int[]
+            var intCodes = new long[]
             {
                 3,50,
                 99
             };
-            var computer = IntCodeComputer.Create("aa", intCodes, new int[] { 20, 30, 40 });
+            var computer = IntCodeComputer.Create("aa", intCodes, new long[] { 20, 30, 40 });
 
             // Act
 
@@ -113,12 +113,12 @@ namespace adventofcode2019_day11Tests.Day11Part1
         public void Input_MulitpleInput_Test03()
         {
             // Arrange
-            var intCodes = new int[]
+            var intCodes = new long[]
             {
                 3,50,
                 99
             };
-            var computer = IntCodeComputer.Create("aa", intCodes, new int[] { 20, 30, 40 });
+            var computer = IntCodeComputer.Create("aa", intCodes, new long[] { 20, 30, 40 });
 
             // Act
             computer.AddInput(50);
@@ -139,7 +139,7 @@ namespace adventofcode2019_day11Tests.Day11Part1
         public void Input_GiveAllInputToCumpterDuringProcessRequest_Test01()
         {
             // Arrange
-            var intCodes = new int[]
+            var intCodes = new long[]
             {
                 3,50,
                 99
@@ -147,7 +147,7 @@ namespace adventofcode2019_day11Tests.Day11Part1
             var computer = IntCodeComputer.Create(intCodes);
 
             // Act
-            computer.ProcessWithUserInput(new int[] { 1 });
+            computer.ProcessWithUserInput(new long[] { 1 });
 
             // Arrange
             computer.IsHalted.ShouldBeTrue();
@@ -164,7 +164,7 @@ namespace adventofcode2019_day11Tests.Day11Part1
         public void Input_AfterWaitingForInput_Test01()
         {
             // Arrange
-            var intCodes = new int[]
+            var intCodes = new long[]
             {
                 3,50,
                 99

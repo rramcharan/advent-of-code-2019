@@ -10,7 +10,7 @@ namespace adventofcode2019_day11.Day11Part1
         public ParameterMode ModeParam1 { get; set; }
         public ParameterMode ModeParam2 { get; set; }
         public ParameterMode ModeParam3 { get; set; }
-        public static Instruction Parse(int code)
+        public static Instruction Parse(long code)
         {
             var result = new Instruction
             {
@@ -23,7 +23,7 @@ namespace adventofcode2019_day11.Day11Part1
             return result;
         }
 
-        private static Opcode SetOpcode(int code)
+        private static Opcode SetOpcode(long code)
         {
             switch (code)
             {
@@ -35,15 +35,17 @@ namespace adventofcode2019_day11.Day11Part1
                 case 6: return Opcode.JumpIfFalse;
                 case 7: return Opcode.SetResetIfLessThan;
                 case 8: return Opcode.SetResetIfEquals;
+                case 9: return Opcode.SetRelativeBase;
                 case 99: return Opcode.Halt;
                 default: throw new ArgumentException($"Unknown opcode {code}", nameof(code));
             }
         }
 
-        private static ParameterMode GetParameterMode(int number)
+        private static ParameterMode GetParameterMode(long number)
         {
             if (number == 0) return ParameterMode.Position;
             if (number == 1) return ParameterMode.Immediate;
+            if (number == 2) return ParameterMode.Relative;
 
             throw new ArgumentException($"Number '{number}' is not supported", nameof(number));
         }

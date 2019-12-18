@@ -23,6 +23,10 @@
         /// </summary>
         SetResetIfEquals = 8,
         /// <summary>
+        /// Set the relative base
+        /// </summary>
+        SetRelativeBase = 9,
+        /// <summary>
         /// End execution
         /// </summary>
         Halt = 99,
