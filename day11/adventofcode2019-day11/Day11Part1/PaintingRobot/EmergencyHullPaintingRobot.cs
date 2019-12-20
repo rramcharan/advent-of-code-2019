@@ -167,8 +167,18 @@ namespace adventofcode2019_day11.Day11Part1.PaintingRobot
                 if (Computer.IsWaitingForInput)
                 {
                     var panel = Panel(_head.X, _head.Y);
-                    var color = (panel==null)? PaintingColors.White : panel.Color;
-                    var input = (color == PaintingColors.Black) ? 1L : 0L;
+                    PaintingColors color;
+                    if (panel == null)
+                    {
+                        color = (_head.X==0 && _head.Y==0)
+                            ?PaintingColors.White
+                            :PaintingColors.Black;
+                    }
+                    else
+                    {
+                        color = panel.Color;
+                    }
+                    var input = (color == PaintingColors.White) ? 1L : 0L;
                     Computer.AddInput(input);
 
                 }

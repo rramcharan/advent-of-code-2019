@@ -69,6 +69,7 @@
     <Compile Include="Day11Part1\PaintingRobot\PuzzleDay11Part1.cs" />
     <Compile Include="Day11Part1\PaintingRobot\DifferentMovesTests.cs" />
     <Compile Include="Day11Part1\PaintingRobot\EmergencyHullPaintingRobotTests.cs" />
+    <Compile Include="Day11Part2\PaintingRobot\PuzzleDay11Part2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
