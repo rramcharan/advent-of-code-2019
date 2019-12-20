@@ -1,4 +1,5 @@
-﻿using System;
+﻿using adventofcode2019_day11.Day11Part1.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ namespace adventofcode2019_day11.Day11Part1.PaintingRobot
         public Dictionary<int, Dictionary<int, Panel>> Canvas;
         private Head _head;
         private List<Panel> _allPanels;
+        public IntCodeComputer Computer { get; private set; }
 
         public int NbrOfPanelsPainted => _allPanels.Count;
 
@@ -20,6 +22,10 @@ namespace adventofcode2019_day11.Day11Part1.PaintingRobot
             Canvas = new Dictionary<int, Dictionary<int, Panel>>();
             _head = new Head { X = 0, Y = 0, Direction = Direction.Up };
             _allPanels = new List<Panel>();
+            MinX = -1;
+            MaxX = 1;
+            MinY = -1;
+            MaxY = 1;
         }
 
         //public static EmergencyHullPaintingRobot RunIntcode()
@@ -29,14 +35,11 @@ namespace adventofcode2019_day11.Day11Part1.PaintingRobot
 
         public string ShowDrawing()
         {
-            var minX = -2; var minY = -2;
-            var maxX = 2; var maxY = 2;
-
             var sb = new StringBuilder();
-            for (var y = maxY; y >= minY; y--)
+            for (var y = MaxY+1; y >= MinY-1; y--)
             {
                 sb.AppendLine();
-                for (var x = minX; x <= maxX; x++)
+                for (var x = MinX-1; x <= MaxX+1; x++)
                 {
                     var panel = Panel(x, y);
                     var isHead = IsHeadAt(x, y);
@@ -48,25 +51,36 @@ namespace adventofcode2019_day11.Day11Part1.PaintingRobot
             return sb.ToString();
         }
 
+        public void OutputAndMove(long color, long moveDirection)
+        {
+            OutputAndMove(Convert.ToInt32(color), Convert.ToInt32(moveDirection));
+        }
+        
         public void OutputAndMove(int color, int moveDirection)
         {
+            OutputAndMove((PaintingColors)color, (Direction)moveDirection);
+        }
+
+        public void OutputAndMove(PaintingColors color, Direction moveDirection)
+        {
+            //Console.WriteLine($"Move: {moveDirection}");
             var panel = Panel(_head.X, _head.Y);
             if (panel == null)
             {
                 panel = AddPanel(_head.X, _head.Y);
             }
-            panel.Color = color == 0 ? PaintingColors.White : color == 1 ? PaintingColors.Black : throw new NotImplementedException();
+            panel.Color = color;// = color == Colors. ? PaintingColors.White : color == 1 ? PaintingColors.Black : throw new NotImplementedException();
 
             switch (_head.Direction)
             {
                 case Direction.Up:
                     switch (moveDirection)
                     {
-                        case 0: // move left
+                        case Direction.Left:
                             _head.X -= 1;
                             _head.Direction = Direction.Left;
                             break;
-                        case 1: // move right
+                        case Direction.Right:
                             _head.X += 1;
                             _head.Direction = Direction.Right;
                             break;
@@ -76,11 +90,11 @@ namespace adventofcode2019_day11.Day11Part1.PaintingRobot
                 case Direction.Left:
                     switch (moveDirection)
                     {
-                        case 0: // move left
+                        case Direction.Left:
                             _head.Y -= 1;
                             _head.Direction = Direction.Down;
                             break;
-                        case 1: // move right
+                        case Direction.Right:
                             _head.Y += 1;
                             _head.Direction = Direction.Up;
                             break;
@@ -90,11 +104,11 @@ namespace adventofcode2019_day11.Day11Part1.PaintingRobot
                 case Direction.Down:
                     switch (moveDirection)
                     {
-                        case 0: // move left
+                        case Direction.Left:
                             _head.X += 1;
                             _head.Direction = Direction.Right;
                             break;
-                        case 1: // move right
+                        case Direction.Right:
                             _head.X -= 1;
                             _head.Direction = Direction.Left;
                             break;
@@ -104,11 +118,11 @@ namespace adventofcode2019_day11.Day11Part1.PaintingRobot
                 case Direction.Right:
                     switch (moveDirection)
                     {
-                        case 0: // move left
+                        case Direction.Left:
                             _head.Y += 1;
                             _head.Direction = Direction.Up;
                             break;
-                        case 1: // move right
+                        case Direction.Right:
                             _head.Y -= 1;
                             _head.Direction = Direction.Down;
                             break;
@@ -117,10 +131,58 @@ namespace adventofcode2019_day11.Day11Part1.PaintingRobot
                     break;
                 default: throw new NotImplementedException($"moveDirection: from {_head.Direction}");
             }
+            //Console.WriteLine(ShowDrawing());
+        }
+
+        public static EmergencyHullPaintingRobot Process(long[] intCode)
+        {
+            var paintingRobot = new EmergencyHullPaintingRobot();
+            paintingRobot.RunCode(intCode);
+            return paintingRobot;
+        }
+
+        private void RunCode(long[] intCode)
+        {
+            Computer = IntCodeComputer.Create("PaintingRobot", intCode);
+            do
+            {
+                Computer.Process();
+
+                if (Computer.Output.Count > 0)
+                {
+                    if (Computer.Output.Count == 2)
+                    {
+                        OutputAndMove(Computer.Output[0], Computer.Output[1]);
+                        Computer.Output.Clear();
+                    }
+                    else
+                    {
+                        throw new Exception($"Unexpected number of output (${Computer.Output.Count})received from int-computer.");
+                    }
+                }
+                if (Computer.IsHalted)
+                {
+                    break;
+                }
+                if (Computer.IsWaitingForInput)
+                {
+                    var panel = Panel(_head.X, _head.Y);
+                    var color = (panel==null)? PaintingColors.White : panel.Color;
+                    var input = (color == PaintingColors.Black) ? 1L : 0L;
+                    Computer.AddInput(input);
+
+                }
+            } while (!Computer.IsHalted);
+
         }
 
         private Panel AddPanel(int x, int y)
         {
+            if (x < MinX) MinX = x;
+            if (x > MaxX) MaxX = x;
+            if (y < MinY) MinY = y;
+            if (y > MaxY) MaxY = y;
+
             var panel = new Panel { X = x, Y = y };
             if (!Canvas.ContainsKey(panel.X)) Canvas[panel.X]=new Dictionary<int, Panel>();
             if (!Canvas[panel.X].ContainsKey(panel.Y))
@@ -160,6 +222,10 @@ namespace adventofcode2019_day11.Day11Part1.PaintingRobot
 
             return Canvas[x][y];
         }
+        public int MinX { get; private set; }
+        public int MaxX { get; private set; }
+        public int MinY { get; private set; }
+        public int MaxY { get; private set; }
     }
     public class Head
     {
@@ -173,17 +239,5 @@ namespace adventofcode2019_day11.Day11Part1.PaintingRobot
     public int X { get; set; }
     public int Y { get; set; }
     public PaintingColors Color { get; set; }
-    }
-    public enum Direction
-    {
-        Up,
-        Right,
-        Down,
-        Left
-    }
-    public enum PaintingColors
-    {
-        Black,
-        White,
     }
 }

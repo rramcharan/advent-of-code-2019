@@ -90,10 +90,16 @@ namespace adventofcode2019_day11.Day11Part1
 
             return computer;
         }
+        public static IntCodeComputer Create(string name, params long[] intCodes)
+        {
+            var computer = new IntCodeComputer(intCodes);
+            computer.Name = name;
+
+            return computer;
+        }
         public static IntCodeComputer Create(params long[] intCodes)
         {
-            return new IntCodeComputer(intCodes);
-
+            return Create(string.Empty, intCodes);
         }
         public static IntCodeComputer Process(params long[] intCodes)
         {

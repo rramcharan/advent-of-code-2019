@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Day11Part1\AmplifierController.cs" />
     <Compile Include="Day11Part1\AmplifierWithFeedbackLookController.cs" />
+    <Compile Include="Day11Part1\Enums\Colors.cs" />
     <Compile Include="Day11Part1\PaintingRobot\EmergencyHullPaintingRobot.cs" />
     <Compile Include="Day11Part1\Instruction.cs" />
     <Compile Include="Day11Part1\IntCodeComputer.cs" />

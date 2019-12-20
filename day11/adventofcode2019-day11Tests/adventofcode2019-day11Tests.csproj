@@ -67,7 +67,7 @@
     <Compile Include="Day11Part1\GravityAssistDay9Part1Tests.cs" />
     <Compile Include="Day11Part1\InputTests.cs" />
     <Compile Include="Day11Part1\PaintingRobot\PuzzleDay11Part1.cs" />
-    <Compile Include="Day11Part1\PaintingRobot\SingleMovesTests.cs" />
+    <Compile Include="Day11Part1\PaintingRobot\DifferentMovesTests.cs" />
     <Compile Include="Day11Part1\PaintingRobot\EmergencyHullPaintingRobotTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
