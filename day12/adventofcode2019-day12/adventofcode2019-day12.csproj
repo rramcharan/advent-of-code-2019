@@ -48,6 +48,7 @@
     <Compile Include="Day12Part1\Planet.cs" />
     <Compile Include="Day12Part1\Position.cs" />
     <Compile Include="Day12Part1\Velocity.cs" />
+    <Compile Include="Day12Part2\PlanetMoveToInitialPositionCalculator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

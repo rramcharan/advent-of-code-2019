@@ -7,6 +7,6 @@ namespace adventofcode2019_day12.Day12Part1
         public int X { get; set; }
         public int Y { get; set; }
         public int Z { get; set; }
-        public int Energy => (Math.Abs(X) + Math.Abs(Y) + Math.Abs(Z));
+        public long Energy => (Math.Abs(X) + Math.Abs(Y) + Math.Abs(Z));
     }
 }

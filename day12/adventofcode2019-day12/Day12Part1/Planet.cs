@@ -16,7 +16,7 @@ namespace adventofcode2019_day12.Day12Part1
         public List<Moon> Moons { get; private set; }
         public Dictionary<int, Moon> OrderedMoons { get; private set; }
 
-        public int Energy => Moons.Sum(m => m.Energy);
+        public long Energy => Moons.Sum(m => m.Energy);
 
         public void AddMoon(Moon moon)
         {

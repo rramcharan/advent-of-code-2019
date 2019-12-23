@@ -64,6 +64,8 @@
     <Compile Include="Day12Part1\PlanetMonnsEnergyTests.cs" />
     <Compile Include="Day12Part1\PuzzleDay1Part2.cs" />
     <Compile Include="Day12Part1\PlanetTests.cs" />
+    <Compile Include="Day12Part2\PlanetMoveToInitialPositionCalculator_SlowTests.cs" />
+    <Compile Include="Day12Part2\PlanetMoveToInitialPositionCalculatorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
