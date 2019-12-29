@@ -242,3 +242,17 @@ This set of initial positions takes `4686774924` steps before it repeats a previ
 *How many steps does it take* to reach the first state that exactly matches a previous state?
 
 Although it hasn't changed, you can still [get your puzzle input](https://adventofcode.com/2019/day/12/input).
+
+
+
+Optimise
+
+Run slow test (max # loops: 3.000.000)
+
+|                         | Move       | Compare    |
+| ----------------------- | ---------- | ---------- |
+| At start                | 05,3412450 | 00,2563644 |
+| Use arry iso List       | 04,4444642 | 00,1724846 |
+| For for iso foreach     | 04,3849812 | 00,1798197 |
+| Calc velocity (compare) | 04,2509550 | 00,16549   |
+

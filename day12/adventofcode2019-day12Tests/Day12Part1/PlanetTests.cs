@@ -22,7 +22,7 @@ namespace adventofcode2019_day12.Day12Part1.Tests
 <x=4, y=-8, z=8>
 <x=3, y=5, z=-1>");
 
-            planet.Moons.Count.ShouldBe(4);
+            planet.NumberOfMoons.ShouldBe(4);
             planet.ShowMoon().ShouldBe(@"
 pos=<x=-1, y=0, z=2>, vel=<x=0, y=0, z=0>
 pos=<x=2, y=-10, z=-7>, vel=<x=0, y=0, z=0>

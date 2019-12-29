@@ -31,5 +31,17 @@ namespace adventofcode2019_day12.Day12Part2.Tests
                 NumberOfMovesToInitalPosition_Test01(); 
             // 511 ms
         }
+
+        [TestMethod()]
+        public void NumberOfMovesToAPreviousPosition_Test01()
+        {
+            var planet = PlanetMovesToAPrevPositionCalculator.AddMoons(@"
+<x=-1, y=0, z=2>
+<x=2, y=-10, z=-7>
+<x=4, y=-8, z=8>
+<x=3, y=5, z=-1>");
+
+            planet.NumberOfMovesToAPreviousPosition().ShouldBe(2772);
+        }
     }
 }
