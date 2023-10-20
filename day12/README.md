@@ -256,3 +256,25 @@ Run slow test (max # loops: 3.000.000)
 | For for iso foreach     | 04,3849812 | 00,1798197 |
 | Calc velocity (compare) | 04,2509550 | 00,16549   |
 
+Before optimizing
+
+Running PuzzleDay12Part2 (max loop 100.000):
+
+|          | Move          | Compare       |
+| -------- | ------------- | ------------- |
+| At start | 00:00,0185870 | 01:54,3188160 |
+| opt 1    | 00:00,0165083 | 00:00,7576687 |
+| opt 2    |               |               |
+| opt 3    |               |               |
+
+Running PuzzleDay12Part2 (max loop 10.000):
+
+|          | Move       | Compare    |
+| -------- | ---------- | ---------- |
+| At start | 00,0019199 | 00,4414764 |
+| opt 1    | 00,0019819 | 00,0275943 |
+| opt 2    |            |            |
+| opt 3    |            |            |
+
+
+

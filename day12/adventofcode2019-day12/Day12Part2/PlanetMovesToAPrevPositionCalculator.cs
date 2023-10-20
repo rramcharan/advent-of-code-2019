@@ -1,128 +1,140 @@
-﻿//using adventofcode2019_day12.Day12Part1;
-//using System;
-//using System.Collections.Generic;
-//using System.Diagnostics;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
+﻿using adventofcode2019_day12.Day12Part1;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-//namespace adventofcode2019_day12.Day12Part2
-//{
-//    public class PlanetMovesToAPrevPositionCalculator
-//    {
-//        private Planet _refPlanet;
-//        private long _energyRefPlanet;
-//        private int _nbrOfMoons;
-//        private Planet _planet;
+namespace adventofcode2019_day12.Day12Part2
+{
+    public class PlanetMovesToAPrevPositionCalculator
+    {
+        private int _nbrOfMoons;
+        private Planet _planet;
 
-//        private PlanetMovesToAPrevPositionCalculator(Planet refPlanet, Planet planet)
-//        {
-//            _refPlanet = refPlanet;
-//            _planet = planet;
+        private PlanetMovesToAPrevPositionCalculator(Planet planet)
+        {
+            _planet = planet;
+            _nbrOfMoons = _planet.NumberOfMoons;
+        }
 
-//            _energyRefPlanet = refPlanet.Energy;
-//            _nbrOfMoons = refPlanet.NumberOfMoons;
-//        }
+        public long NumberOfMovesToAPreviousPosition()
+        {
+            var stopwatchMove = new Stopwatch();
+            var stopwatchCompare = new Stopwatch();
 
-//        public long NumberOfMovesToAPreviousPosition()
-//        {
-//            var stopwatchMove = new Stopwatch();
-//            var stopwatchCompare = new Stopwatch();
+            AddMoveToList(_planet);
+            var nbrOfMoves = 1L;
+            _planet.Move(1);
+            while (true)
+            {
+                stopwatchCompare.Start();
+                if (APreviousPositionReached(_planet)) break;
+                stopwatchCompare.Stop();
 
-//            AddMoveToList(_planet);
-//            var nbrOfMoves = 1L;
-//            _planet.Move(1);
-//            while (true)
-//            {
-//                stopwatchCompare.Start();
-//                if (APreviousPositionReached(_planet)) break;
-//                stopwatchCompare.Stop();
+                stopwatchMove.Start();
+                _planet.Move(1);
+                stopwatchMove.Stop();
 
-//                stopwatchMove.Start();
-//                _planet.Move(1);
-//                stopwatchMove.Stop();
+                nbrOfMoves++;
+                // if (nbrOfMoves % 100000000 == 0)
+                // if (nbrOfMoves % 3000000 == 0)
+                //if (nbrOfMoves % 10000 == 0) Console.WriteLine($"move: {nbrOfMoves}");
+                //if (nbrOfMoves % 100000 == 0)
+                if (nbrOfMoves % 1000000 == 0) Console.WriteLine($"move: {nbrOfMoves}");
+                if (nbrOfMoves % 100000000 == 0)
+                {
+                    Console.WriteLine($"move: {nbrOfMoves}");
+                    nbrOfMoves = 0;
+                    break;
+                }
 
-//                nbrOfMoves++;
-//                if (nbrOfMoves % 100000000 == 0) Console.WriteLine($"move: {nbrOfMoves}");
-//                // if (nbrOfMoves % 100000000 == 0)
-//                // if (nbrOfMoves % 3000000 == 0)
-//                if (nbrOfMoves % 10000000000 == 0)
-//                {
-//                    Console.WriteLine($"move: {nbrOfMoves}");
-//                    nbrOfMoves = 0;
-//                    break;
-//                }
+            }
+            Console.WriteLine($"move: {nbrOfMoves}");
 
-//            }
-//            Console.WriteLine($"move: {nbrOfMoves}");
-            
-//            Console.WriteLine($"Move   : {stopwatchMove.Elapsed.ToString("G")}");
-//            Console.WriteLine($"Compare: {stopwatchCompare.Elapsed.ToString("G")}");
-//            return nbrOfMoves;
-//        }
+            Console.WriteLine($"Move   : {stopwatchMove.Elapsed.ToString("G")}");
+            Console.WriteLine($"Compare: {stopwatchCompare.Elapsed.ToString("G")}");
+            return nbrOfMoves;
+        }
 
-//        private List<List<Moon>> ListOfMoves = new List<List<Moon>>();
-//        private bool APreviousPositionReached(Planet refPlanet)
-//        {
-//            foreach (var planetMoved in ListOfMoves)
-//            {
-//                if (IsSameState(refPlanet.Moons, planetMoved))
-//                  return true;
-//            }
-//            AddMoveToList(refPlanet);
-//            return false;
-//        }
+        private List<List<Moon>> ListOfMoves = new List<List<Moon>>();
+        private Dictionary<int, Dictionary<int, Dictionary<int, Dictionary<int, List<Velocity>>>>> MoonsMovements =
+            new Dictionary<int, Dictionary<int, Dictionary<int, Dictionary<int, List<Velocity>>>>>();
+        private bool APreviousPositionReached(Planet planet)
+        {
+            if (IsSameState(planet))
+                return true;
 
-//        private void AddMoveToList(Planet refPlanet)
-//        {
-//            var moonsCopy = new List<Moon>();
-//            for (var idx = 0; idx < _nbrOfMoons; idx++)
-//            {
-//                var moon = refPlanet.Moons[idx];
-//                var moonCopy = new Moon();
+            AddMoveToList(planet);
+            return false;
+        }
 
-//                moonCopy.Position.X = moon.Position.X;
-//                moonCopy.Position.Y = moon.Position.Y;
-//                moonCopy.Position.Z = moon.Position.Z;
+        private void AddMoveToList(Planet planet)
+        {
+            for (var idx = 0; idx < _nbrOfMoons; idx++)
+            {
+                var moon = planet.Moons[idx];
+                if (!MoonsMovements.ContainsKey(idx))
+                    MoonsMovements.Add(idx, new Dictionary<int, Dictionary<int, Dictionary<int, List<Velocity>>>>());
 
-//                moonCopy.Velocity.X = moon.Velocity.X;
-//                moonCopy.Velocity.Y = moon.Velocity.Y;
-//                moonCopy.Velocity.Z = moon.Velocity.Z;
+                if (!MoonsMovements[idx].ContainsKey(moon.Position.X))
+                    MoonsMovements[idx].Add(moon.Position.X, new Dictionary<int, Dictionary<int, List<Velocity>>>());
 
-//                moonsCopy.Add(moonCopy);
-//            }
-//            ListOfMoves.Add(moonsCopy);
-//        }
-        
-//        private bool IsSameState(Moon[] moons1, List<Moon> moons2)
-//        {
-//            for (var idx = 0; idx < _nbrOfMoons; idx++)
-//            {
-//                var refMoon = moons1[idx];
-//                var moon = moons2[idx];
+                if (!MoonsMovements[idx][moon.Position.X].ContainsKey(moon.Position.Y))
+                    MoonsMovements[idx][moon.Position.X].Add(moon.Position.Y, new Dictionary<int, List<Velocity>>());
 
-//                if (refMoon.Position.X != moon.Position.X) return false;
-//                if (refMoon.Position.Y != moon.Position.Y) return false;
-//                if (refMoon.Position.Z != moon.Position.Z) return false;
+                if (!MoonsMovements[idx][moon.Position.X][moon.Position.Y].ContainsKey(moon.Position.Z))
+                    MoonsMovements[idx][moon.Position.X][moon.Position.Y][moon.Position.Z] = new List<Velocity>();
 
-//                if (refMoon.Velocity.X != moon.Velocity.X) return false;
-//                if (refMoon.Velocity.Y != moon.Velocity.Y) return false;
-//                if (refMoon.Velocity.Z != moon.Velocity.Z) return false;
-//            }
+                var velocity = new Velocity
+                {
+                    X = moon.Velocity.X,
+                    Y = moon.Velocity.Y,
+                    Z = moon.Velocity.Z,
+                };
 
-//            return true;
-//        }
+                MoonsMovements[idx][moon.Position.X][moon.Position.Y][moon.Position.Z].Add(velocity);
+            }
+        }
 
-//        public static PlanetMovesToAPrevPositionCalculator AddMoons(string text)
-//        {
-//            var refPlanet = new Planet();
-//            refPlanet.AddMoons(text);
+        private bool IsSameState(Planet planet)
+        {
+            for (var idx = 0; idx < _nbrOfMoons; idx++)
+            {
+                var nbrOfMoonsMatches = 0;
+                var moon = planet.Moons[idx];
+                if (MoonsMovements.ContainsKey(idx)
+                    && MoonsMovements[idx].ContainsKey(moon.Position.X)
+                    && MoonsMovements[idx][moon.Position.X].ContainsKey(moon.Position.Y)
+                    && MoonsMovements[idx][moon.Position.X][moon.Position.Y].ContainsKey(moon.Position.Z))
+                {
+                    var aMovedMoons = MoonsMovements[idx][moon.Position.X][moon.Position.Y][moon.Position.Z];
+                    foreach (var aMovedMoon in aMovedMoons)
+                    {
+                        if (aMovedMoon.X == moon.Velocity.X &&
+                            aMovedMoon.Y == moon.Velocity.Y &&
+                            aMovedMoon.Z == moon.Velocity.Z)
+                        {
+                            nbrOfMoonsMatches++;
+                            if (nbrOfMoonsMatches == _nbrOfMoons) return true;
+                        }
+                    }
+                }
+                else
+                    return false;
 
-//            var planet = new Planet();
-//            planet.AddMoons(text);
+            }
+            return false;
+        }
 
-//            var result = new PlanetMovesToAPrevPositionCalculator(refPlanet, planet);
-//            return result;
-//        }
-//    }
-//}
+        public static PlanetMovesToAPrevPositionCalculator AddMoons(string text)
+        {
+            var planet = new Planet();
+            planet.AddMoons(text);
+
+            var result = new PlanetMovesToAPrevPositionCalculator(planet);
+            return result;
+        }
+    }
+}
